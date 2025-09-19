@@ -360,7 +360,8 @@ export const corridorGroups = {
         corridor: 3
       },
       {
-        id: 'buffet',
+        id: 'Room17',
+        number: 17,
         x: 446,
         y: 2282,
         width: 116,
@@ -372,7 +373,6 @@ export const corridorGroups = {
         borderRadius: 8,
         fontSize: 24,
         fontColor: '#ffffff',
-        category: 'buffet',
         zIndex: 1,
         visible: true,
         corridor: 3
@@ -511,8 +511,8 @@ export const corridorGroups = {
     rooms: [
       // Комнаты коридора 4 (только уникальные)
       {
-         id: 'Room30',
-         number: 30,
+         id: 'Room24',
+         number: 24,
          x: 352,
          y: 2008,
          width: 160,
@@ -529,8 +529,8 @@ export const corridorGroups = {
          corridor: 4
       },
       {
-          id: 'Room31',
-          number: 31,
+          id: 'Room25',
+          number: 25,
           x: 354,
           y: 1840,
           width: 160,
@@ -547,8 +547,8 @@ export const corridorGroups = {
           corridor: 4
       },
       {
-           id: 'Room32',
-           number: 32,
+           id: 'Room26',
+           number: 26,
            x: 357,
            y: 1674,
            width: 158,
@@ -565,8 +565,8 @@ export const corridorGroups = {
            corridor: 4
       },
       {
-            id: 'Room33',
-            number: 33,
+            id: 'Room27',
+            number: 27,
             x: 357,
             y: 1596,
             width: 161,
@@ -583,8 +583,8 @@ export const corridorGroups = {
             corridor: 4
       },
       {
-             id: 'Room34',
-             number: 34,
+             id: 'Room28',
+             number: 28,
              x: 360,
              y: 1465,
              width: 161,
@@ -601,8 +601,8 @@ export const corridorGroups = {
              corridor: 4
       },
       {
-              id: 'Room35',
-              number: 35,
+              id: 'Room29',
+              number: 29,
               x: 361,
               y: 1308,
               width: 161,
@@ -619,8 +619,8 @@ export const corridorGroups = {
               corridor: 4
       },
       {
-               id: 'Room36',
-               number: 36,
+               id: 'Room30',
+               number: 30,
                x: 364,
                y: 1146,
                width: 160,
@@ -637,44 +637,8 @@ export const corridorGroups = {
                corridor: 4
       },
       {
-                id: 'Room37',
-                number: 37,
-                x: 280,
-                y: 1074,
-                width: 244,
-                height: 62,
-                rotation: 0.80,
-                color: '#BFF355',
-                borderColor: '#A8D444',
-                borderWidth: 2,
-                borderRadius: 8,
-                fontSize: 24,
-                fontColor: '#ffffff',
-                zIndex: 1,
-                visible: true,
-                corridor: 4
-      },
-      {
-                 id: 'Room38',
-                 number: 38,
-                 x: 280,
-                 y: 962,
-                 width: 246,
-                 height: 94,
-                 rotation: 0.80,
-                 color: '#BFF355',
-                 borderColor: '#A8D444',
-                 borderWidth: 2,
-                 borderRadius: 8,
-                 fontSize: 24,
-                 fontColor: '#ffffff',
-                 zIndex: 1,
-                 visible: true,
-                 corridor: 4
-      },
-      {
-                   id: 'Room39',
-                   number: 39,
+                   id: 'Room32',
+                   number: 32,
                    x: 594,
                    y: 1940,
                    width: 160,
@@ -691,8 +655,8 @@ export const corridorGroups = {
                    corridor: 4
       },
       {
-                     id: 'Room40',
-                     number: 40,
+                     id: 'Room33',
+                     number: 33,
                      x: 596,
                      y: 1772,
                      width: 160,
@@ -709,8 +673,8 @@ export const corridorGroups = {
                      corridor: 4
       },
       {
-                       id: 'Room41',
-                       number: 41,
+                       id: 'Room34',
+                       number: 34,
                        x: 596,
                        y: 1615,
                        width: 162,
@@ -727,8 +691,8 @@ export const corridorGroups = {
                        corridor: 4
       },
       {
-                         id: 'Room42',
-                         number: 42,
+                         id: 'Room35',
+                         number: 35,
                          x: 604,
                          y: 1191,
                          width: 160,
@@ -745,8 +709,8 @@ export const corridorGroups = {
                          corridor: 4
       },
       {
-                           id: 'Room43',
-                           number: 43,
+                           id: 'Room36',
+                           number: 36,
                            x: 606,
                            y: 1078,
                            width: 160,
@@ -761,9 +725,62 @@ export const corridorGroups = {
                            zIndex: 1,
                            visible: true,
                            corridor: 4
+      },
+      {
+                         id: 'Stairs4',
+                         x: 602,
+                         y: 1363,
+                         width: 160,
+                         height: 238,
+                         rotation: 0.80,
+                         color: '#BFF355',
+                         borderColor: '#A8D444',
+                         borderWidth: 2,
+                         borderRadius: 8,
+                         fontSize: 24,
+                         fontColor: '#ffffff',
+                         category: 'stairs',
+                         zIndex: 1,
+                         visible: true,
+                         corridor: 4
+      },
+      {
+                 id: 'buffet',
+                 x: 280,
+                 y: 962,
+                 width: 246,
+                 height: 94,
+                 rotation: 0.80,
+                 color: '#BFF355',
+                 borderColor: '#A8D444',
+                 borderWidth: 2,
+                 borderRadius: 8,
+                 fontSize: 24,
+                 fontColor: '#ffffff',
+                 category: 'buffet',
+                 zIndex: 1,
+                 visible: true,
+                 corridor: 4
+      },
+      {
+                id: 'toilet',
+                number: 31,
+                x: 280,
+                y: 1074,
+                width: 244,
+                height: 62,
+                rotation: 0.80,
+                color: '#BFF355',
+                borderColor: '#A8D444',
+                borderWidth: 2,
+                borderRadius: 8,
+                fontSize: 24,
+                fontColor: '#ffffff',
+                category: 'toilet',
+                zIndex: 1,
+                visible: true,
+                corridor: 4
       }
-
-
       ]
   },
   corridor5: {
@@ -771,8 +788,8 @@ export const corridorGroups = {
     rooms: [
       // Комнаты коридора 2 (только уникальные)
       {
-         id: 'Room50',
-         number: 50,
+         id: 'Room37',
+         number: 37,
          x: 772,
          y: 856,
          width: 124,
@@ -789,8 +806,8 @@ export const corridorGroups = {
          corridor: 5
       },
       {
-        id: 'Room51',
-        number: 51,
+        id: 'Room38',
+        number: 38,
         x: 676,
         y: 470,
         width: 90,
@@ -807,8 +824,8 @@ export const corridorGroups = {
         corridor: 5
       },
       {
-        id: 'Room52',
-        number: 52,
+        id: 'Room39',
+        number: 39,
         x: 676,
         y: 369,
         width: 92,
@@ -825,8 +842,8 @@ export const corridorGroups = {
         corridor: 5
       },
       {
-        id: 'Room53',
-        number: 53,
+        id: 'Room40',
+        number: 40,
         x: 678,
         y: 210,
         width: 92,
@@ -843,8 +860,8 @@ export const corridorGroups = {
         corridor: 5
       },
       {
-        id: 'Room54',
-        number: 54,
+        id: 'Room41',
+        number: 41,
         x: 680,
         y: 52,
         width: 92,
@@ -861,8 +878,8 @@ export const corridorGroups = {
         corridor: 5
       },
       {
-         id: 'Room55',
-         number: 55,
+         id: 'Room42',
+         number: 42,
          x: 512,
          y: 766,
          width: 89,
@@ -879,8 +896,8 @@ export const corridorGroups = {
          corridor: 5
       },
       {
-         id: 'Room56',
-         number: 56,
+         id: 'Room43',
+         number: 43,
          x: 514,
          y: 614,
          width: 88,
@@ -897,8 +914,8 @@ export const corridorGroups = {
          corridor: 5
       },
       {
-         id: 'Room57',
-         number: 57,
+         id: 'Room44',
+         number: 44,
          x: 514,
          y: 544,
          width: 88,
@@ -915,8 +932,8 @@ export const corridorGroups = {
          corridor: 5
       },
       {
-         id: 'Room58',
-         number: 58,
+         id: 'Room45',
+         number: 45,
          x: 516,
          y: 380,
          width: 88,
@@ -933,8 +950,8 @@ export const corridorGroups = {
          corridor: 5
       },
       {
-         id: 'Room59',
-         number: 59,
+         id: 'Room46',
+         number: 46,
          x: 516,
          y: 304,
          width: 88,
@@ -951,8 +968,8 @@ export const corridorGroups = {
          corridor: 5
       },
       {
-         id: 'Room60',
-         number: 60,
+         id: 'Room47',
+         number: 47,
          x: 516,
          y: 226,
          width: 90,
@@ -969,8 +986,8 @@ export const corridorGroups = {
          corridor: 5
       },
       {
-         id: 'Room61',
-         number: 61,
+         id: 'Room48',
+         number: 48,
          x: 482,
          y: 50,
          width: 126,
@@ -987,8 +1004,8 @@ export const corridorGroups = {
          corridor: 5
       },
       {
-         id: 'Room62',
-         number: 62,
+         id: 'Room49',
+         number: 49,
          x: 368,
          y: 50,
          width: 108,
@@ -1003,6 +1020,24 @@ export const corridorGroups = {
          zIndex: 1,
          visible: true,
          corridor: 5
+      },
+      {
+        id: 'Stairs5',
+        x: 674,
+        y: 678,
+        width: 90,
+        height: 152,
+        rotation: 0.70,
+        color: '#BFF355',
+        borderColor: '#A8D444',
+        borderWidth: 2,
+        borderRadius: 8,
+        fontSize: 24,
+        fontColor: '#ffffff',
+        category: 'stairs',
+        zIndex: 1,
+        visible: true,
+        corridor: 5
       }    
       ]
   },
