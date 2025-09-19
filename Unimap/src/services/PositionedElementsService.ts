@@ -14,7 +14,7 @@ export interface PositionedElementConfig {
   fontColor?: string; // font color for number
   // If provided, the element should render an image sprite instead of a colored box
   imgSrc?: string; // path to sprite (e.g., './src/Sprite/stair.png')
-  category?: 'regular' | 'toilet' | 'stairs';
+  category?: 'regular' | 'toilet' | 'stairs' | 'buffet';
   content?: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;

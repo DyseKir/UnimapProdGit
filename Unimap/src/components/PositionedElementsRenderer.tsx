@@ -47,7 +47,8 @@ const category = squareConfig.category;
           resolvedImgSrc = './src/Sprite/wc.png';
         } else if (category === 'stairs') {
           resolvedImgSrc = './src/Sprite/stair.png';
-        }
+        } else if (category === 'buffet') {
+          resolvedImgSrc = './src/Sprite/buffet.png';
       }
 
    

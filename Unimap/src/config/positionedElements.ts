@@ -360,7 +360,7 @@ export const corridorGroups = {
         corridor: 3
       },
       {
-        id: 'Buffet',
+        id: 'buffet',
         x: 446,
         y: 2282,
         width: 116,
@@ -372,11 +372,10 @@ export const corridorGroups = {
         borderRadius: 8,
         fontSize: 24,
         fontColor: '#ffffff',
-        category: 'Buffet',
+        category: 'buffet',
         zIndex: 1,
         visible: true,
         corridor: 3
-        img: '../sprite/buffet.png'
       },
       {
          id: 'Room18',
