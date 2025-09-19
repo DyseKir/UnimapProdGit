@@ -40,7 +40,6 @@ export const PositionedElementsRenderer: React.FC<PositionedElementsRendererProp
     const squares = squaresConfig.map(squareConfig => {
       const isHighlighted = highlightedRoomId === squareConfig.id;
       const isHovered = hoveredElementId === squareConfig.id;
-      const hasImg = Boolean((squareConfig as any).imgSrc || (squareConfig as any).Img);
       const category = (squareConfig as any).category as ('regular'|'toilet'|'stairs'|undefined);
       let resolvedImgSrc: string | undefined = (squareConfig as any).imgSrc || (squareConfig as any).Img;
       if (!resolvedImgSrc) {
@@ -51,18 +50,7 @@ export const PositionedElementsRenderer: React.FC<PositionedElementsRendererProp
         }
       }
 
-      // derive colors based on category when present
-      const baseCategory = category;
-      const categoryBg = baseCategory === 'toilet'
-        ? '#C9CED6' // pleasant gray
-        : baseCategory === 'stairs'
-          ? '#2E7D32' // dark green
-          : undefined;
-      const categoryBorder = baseCategory === 'toilet'
-        ? '#A9B1BC'
-        : baseCategory === 'stairs'
-          ? '#1B5E20'
-          : undefined;
+   
 
       const content = (
         <div style={{
@@ -76,8 +64,8 @@ export const PositionedElementsRenderer: React.FC<PositionedElementsRendererProp
             inset: 0,
             background: isHighlighted
               ? '#90EE90'
-              : (categoryBg ?? (squareConfig.color || '#BFF355')),
-            border: `${squareConfig.borderWidth || 2}px solid ${isHighlighted ? '#32CD32' : (categoryBorder ?? (squareConfig.borderColor || '#A8D444'))}`,
+  : (squareConfig.color || '#BFF355'),
+            border: `${squareConfig.borderWidth || 2}px solid ${isHighlighted ? '#32CD32' : (squareConfig.borderColor || '#A8D444')}`,
             borderRadius: `${squareConfig.borderRadius || 8}px`,
             display: 'flex',
             alignItems: 'center',

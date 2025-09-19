@@ -78,7 +78,7 @@ export const corridorGroups = {
         corridor: 1
       },
       {
-        id: 'Room5',
+        id: 'stairs1',
         number: 5,
         x: 1165,
         y: 3014,
@@ -133,8 +133,8 @@ export const corridorGroups = {
         corridor: 1
       },
       {
-        id: 'Room8',
-        number: 8,
+        id: 'toilet1',
+        number: "toilet1",
         x: 1166,
         y: 2744,
         width: 78,
