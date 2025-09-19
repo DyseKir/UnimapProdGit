@@ -1,0 +1,23 @@
+.app-layout {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  width: 100vw;
+  height: 100vh;
+}
+
+.site-header {
+  position: relative;
+  z-index: 5;
+}
+
+.site-main {
+  position: relative;
+  z-index: 1;
+}
+
+.site-footer {
+  position: relative;
+  z-index: 5;
+}
+
+

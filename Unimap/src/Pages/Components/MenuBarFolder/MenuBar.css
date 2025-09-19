@@ -1,0 +1,270 @@
+.menu-bar {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-shrink: 0;
+  border-radius: 20px;
+  border: 1px solid #EDEDED;
+  background: #FFF;
+  z-index: 10;
+  box-sizing: border-box;
+  padding: 16px;
+  width: 374px;
+  transition: width 0.35s cubic-bezier(0.4,0,0.2,1),
+              height 0.35s cubic-bezier(0.4,0,0.2,1),
+              padding 0.35s cubic-bezier(0.4,0,0.2,1),
+              opacity 0.25s ease;
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+.menu-bar--large {
+  left: 1526px;
+  height: auto;
+}
+
+.menu-bar--medium {
+  left: auto;
+  width: 374px;
+  border-radius: 16px;
+}
+
+.menu-bar--mobile {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: auto;
+  width: 100vw;
+  min-height: 80px;
+  max-height: 60vh;
+  padding: 12px;
+  border-radius: 20px 20px 0 0;
+  overflow-y: auto;
+  z-index: 20;
+}
+
+.menu-bar--collapsed {
+  width: 64px !important;
+  min-width: 64px !important;
+  max-width: 64px !important;
+  height: 64px !important;
+  min-height: 64px !important;
+  max-height: 64px !important;
+  padding: 8px !important;
+  transition: width 0.35s cubic-bezier(0.4,0,0.2,1),
+              height 0.35s cubic-bezier(0.4,0,0.2,1),
+              padding 0.35s cubic-bezier(0.4,0,0.2,1);
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  opacity: 0.9;
+  overflow: hidden;
+}
+
+.menu-bar__collapsed {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 1;
+}
+.menu-bar__content {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 0;
+}
+.menu-bar--collapsed .menu-bar__content {
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+}
+.menu-bar--collapsed .menu-bar__collapsed {
+  opacity: 1;
+  pointer-events: auto;
+}
+.menu-bar__content--hidden {
+  opacity: 1;
+  transform: none;
+  pointer-events: none;
+  transition: none;
+}
+
+.menu-bar__content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+}
+
+.HeaderContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%; /* Важно! */
+}
+
+.LogoContainer{
+  display: flex;
+  align-items: center;
+}
+.LogoImg{
+  width: 46px;
+  height: 38px;
+}
+.LogoText{
+  margin: 0px 0px 0px 6px;
+  color: #121212;
+  font-family: Inter;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 28px;
+}
+
+
+
+.menu-bar__section { width: 100%; }
+
+.menu-bar__footer {
+  width: 100%;
+  margin-top: auto;
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.menu-bar--collapsed .menu-bar__footer {
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  height: 1px; width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap;
+}
+
+.Line {
+  width: 100%;
+  height: 1px;
+  background: #EDEDED;
+  margin: 0;
+}
+
+/* Unify borders inside the menu to match the floor switcher */
+.menu-bar .building-btn {
+  border-color: #e0e0e0;
+}
+
+.menu-bar .ui-input__field {
+  border-color: #e0e0e0;
+  background: #fff;
+}
+
+.menu-bar .BuildingSelector-list {
+  border-color: #e0e0e0;
+}
+
+/* Search input styles */
+.search-input { position: relative; }
+.search-input__icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); }
+.search-input__field {
+  height: 44px;
+  padding-left: 40px;
+  color: #6B6B6B;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-size: 14px; font-weight: 400; line-height: 20px;
+  background: #fff;
+}
+.search-input__field::placeholder { color: #6B6B6B; font: inherit; }
+
+/* Search container and dropdown */
+.search-container {
+  position: relative;
+}
+
+.search-dropdown {
+  position: relative;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  max-height: 264px; /* 6 items * 44px height each */
+  overflow-y: auto;
+  margin-top: 4px;
+  opacity: 0; /* Полностью прозрачный когда закрыт */
+  visibility: hidden; /* Полностью скрыт когда закрыт */
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+.search-dropdown.show {
+  opacity: 1; /* Видимый когда показан */
+  visibility: visible; /* Видимый когда показан */
+}
+
+/* Custom scrollbar for search dropdown */
+.search-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+.search-dropdown::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.search-dropdown::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.search-dropdown::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+.search-dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.2s ease;
+}
+
+.search-dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.search-dropdown-item:hover {
+  background-color: #f8f9fa;
+}
+
+.search-dropdown-item .room-number {
+  font-weight: 600;
+  color: #333;
+  margin-right: 12px;
+  min-width: 30px;
+}
+
+.search-dropdown-item .room-id {
+  color: #666;
+  margin-right: 12px;
+  flex: 1;
+}
+
+.search-dropdown-item .corridor {
+  color: #999;
+  font-size: 12px;
+}

@@ -1,0 +1,31 @@
+.RegisterContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.RegisterContainer-block {
+  display: flex;
+  align-items: center;
+}
+
+.RegisterContainer-Logo {
+  width: 37px;
+  height: 37px;
+}
+
+.RegisterContainer-text {
+  color: #121212;
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px; 
+  margin-left: 12px;
+}
+
+.RegisterContainer-dots {
+  width: 20px;
+  height: 20px;
+} 

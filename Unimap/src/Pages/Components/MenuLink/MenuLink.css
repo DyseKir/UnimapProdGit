@@ -1,0 +1,83 @@
+.menu-link {
+    display: flex;
+    align-items: center;
+    padding: 10px 16px;
+  }
+  
+  .menu-link-img {
+    width: 18px;
+    height: 18px;
+    display: block;
+  }
+  
+  /* Apply typography to actual AppLink structure */
+  .menu-link .ui-link {
+    text-decoration: none;
+    color: #6B6B6B;
+  }
+
+  .menu-link .ui-link__label {
+    color: #6B6B6B;
+    font-family: Inter;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+  }
+
+  /* align icon and text perfectly on one line */
+  .menu-link .ui-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .menu-link .ui-link__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+  }
+
+
+
+footer {
+  width: 100%;
+}
+
+.Register-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+ 
+}
+
+.Register-block-container {
+  display: flex;
+  align-items: center;
+}
+
+.Register-block-Logo {
+  width: 37px;
+  height: 37px;
+}
+
+.Register-block-text {
+  color: #121212;
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+  margin: 0px 0px 0px 12px; 
+}
+
+.Register-block-dots {
+  width: 20px;
+  height: 20px;
+}
+
+
+

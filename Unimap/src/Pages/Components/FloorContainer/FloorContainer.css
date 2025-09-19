@@ -1,0 +1,12 @@
+.FloorContainer {
+  width: 100%;
+}
+
+.FloorContainer-text {
+  color: #8B8B8B;
+  font-family: Inter;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16px; 
+} 

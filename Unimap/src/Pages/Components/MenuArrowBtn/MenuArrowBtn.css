@@ -1,0 +1,21 @@
+.menu-arrow-btn {
+  display: flex;
+  width: 28px;
+  height: 28px;
+  padding: 6px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6.667px;
+  border: 1px solid #EDEDED;
+  background: #FFF;
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.08);
+}
+
+.menu-arrow-btn__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin: 6px;
+}

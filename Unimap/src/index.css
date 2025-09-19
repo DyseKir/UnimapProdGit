@@ -1,0 +1,30 @@
+/* Global UI primitives */
+@import url('./Pages/Components/UI/ui.css');
+
+/* CSS Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  outline: none;
+  border: none;
+}
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+  font-family: inherit;
+  background: #fff;
+  color: #000;
+}
+
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+ul, ol {
+  list-style: none;
+}

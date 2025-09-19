@@ -1,0 +1,150 @@
+.BuildingSelector {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+/* Keep input's own border; when open just remove spacing */
+.BuildingSelector.open { gap: 0; }
+
+.BuildingSelector-label {
+  color: #8B8B8B;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 16px;
+}
+
+.building-btn {
+  display: flex;
+  padding: 10px 16px;
+  align-items: center;
+  gap: 10px;
+  align-self: stretch;
+  border-radius: 100px;
+  border: 1px solid #6B6B6B;
+  background: #fff;
+  position: relative;
+  z-index: 4;
+  overflow: hidden; /* Скрываем текст который выходит за границы */
+}
+
+.building-btn .ui-btn__icon--left { 
+  margin-right: 10px; 
+  flex-shrink: 0; /* Иконка не сжимается */
+}
+
+.building-btn .ui-btn__icon--right { 
+  margin-left: auto; 
+  transition: transform .18s ease;  
+  flex-shrink: 0; /* Иконка не сжимается */
+}
+
+.BuildingSelector.open .building-btn .ui-btn__icon--right { 
+  transform: rotate(-90deg); 
+}
+
+.building-btn .ui-btn__label { 
+  color: #6B6B6B; 
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; 
+  font-size: 14px; 
+  font-style: normal; 
+  font-weight: 500; 
+  line-height: 20px; 
+  overflow: hidden; /* Скрываем текст который выходит за границы */
+  text-overflow: ellipsis; /* Показываем ... если текст не помещается */
+  white-space: nowrap; /* Текст в одну строку */
+  flex: 1; /* Занимает доступное пространство */
+  min-width: 0; /* Позволяет сжиматься */
+}
+
+/* When open, keep border but remove bottom corner rounding on the trigger */
+.BuildingSelector.open .building-btn {}
+
+.BuildingSelector-list {
+  overflow: hidden;
+  height: 0;
+  transition: height .18s ease;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
+  background: #fff;
+  position: relative;
+  z-index: 3;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  opacity: 0; /* Полностью прозрачный когда закрыт */
+  visibility: hidden; /* Полностью скрыт когда закрыт */
+}
+
+/* Remove visual gap so the list appears to drop out of the input only when open */
+.BuildingSelector-list.open {
+  margin-top: -1px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-top: none;
+  opacity: 1; /* Видимый когда открыт */
+  visibility: visible; /* Видимый когда открыт */
+}
+
+/* Hide border fully when collapsed to avoid visible line */
+.BuildingSelector-list:not(.open) {
+  border-color: transparent;
+}
+
+.BuildingSelector-item {
+  padding: 10px 14px;
+  cursor: pointer;
+  color: #6B6B6B;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.BuildingSelector-item:last-child {
+  border-bottom: none;
+}
+
+.BuildingSelector-item:hover {
+  background: #f8f8f8;
+}
+
+.BuildingSelector-item.selected {
+  background: #39A39B;
+  color: #fff;
+}
+
+/* override: larger dropdown, content at bottom, lifted towards input middle */
+.BuildingSelector-list.open {
+  margin-top: -22px; /* lift list towards input middle */
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-top: none;
+  padding-top: 44px; /* drop content by one item height */
+  max-height: 264px; /* 6 items * 44px height each */
+  overflow-y: auto;
+}
+
+/* Custom scrollbar for dropdown */
+.BuildingSelector-list.open::-webkit-scrollbar {
+  width: 6px;
+}
+
+.BuildingSelector-list.open::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.BuildingSelector-list.open::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.BuildingSelector-list.open::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+

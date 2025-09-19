@@ -1,0 +1,45 @@
+.SetARoute {
+  display: flex;
+  padding: 10px 0;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 12px;
+  align-self: stretch;
+}
+
+.SetARoute-title {
+  color: #6B6B6B;
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+}
+
+.route-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+}
+
+.clear-routes-btn {
+  padding: 10px 16px;
+  background: transparent;
+  border: 1px solid #6B6B6B;
+  border-radius: 100px;
+  color: #6B6B6B;
+  font-size: 14px;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: 1;
+}
+
+.clear-routes-btn:hover {
+  background: #39A39B;
+  border-color: #39A39B;
+  color: #fff;
+} 

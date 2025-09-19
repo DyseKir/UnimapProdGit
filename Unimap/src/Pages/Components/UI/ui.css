@@ -1,0 +1,80 @@
+:root { 
+  --ui-color-primary: #39A39B;
+  --ui-color-primary-hover: #2d8a84;
+  --ui-color-primary-active: #24726c;
+  --ui-color-text-on-primary: #ffffff;
+  --ui-color-text: #121212;
+  --ui-color-muted: #f2f2f2;
+  --ui-focus-ring: 0 0 0 3px rgba(57, 163, 155, 0.35);
+}
+
+.ui-btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  border-radius: 100px; /* pill */
+  padding: 10px; /* md default per Figma */
+  transition: background-color .18s ease, color .18s ease, opacity .18s ease, box-shadow .18s ease;
+  text-align: center;
+  line-height: 1;
+}
+.ui-btn--primary { background: var(--ui-color-primary); color: var(--ui-color-text-on-primary); }
+.ui-btn--secondary { background: var(--ui-color-muted); color: var(--ui-color-text); }
+.ui-btn--ghost { background: transparent; color: var(--ui-color-text); }
+
+/* sizes */
+.ui-btn--sm { padding: 6px 10px; font-size: 12px; }
+.ui-btn--md { padding: 10px; font-size: 14px; }
+.ui-btn--lg { padding: 12px 16px; font-size: 16px; }
+
+/* behaviors */
+.ui-btn--primary:hover { background: var(--ui-color-primary-hover); }
+.ui-btn--primary:active { background: var(--ui-color-primary-active); }
+.ui-btn:focus-visible { outline: none; box-shadow: var(--ui-focus-ring); }
+.ui-btn:disabled { opacity: .6; cursor: not-allowed; }
+.ui-btn__icon { display: inline-flex; }
+.ui-btn__label { font: inherit; }
+
+/* block modifier */
+.ui-btn--block { width: 100%; }
+
+/* icon alignment helpers */
+.ui-btn__icon--right { margin-left: auto; }
+
+/* Figma spec for specific button: primary + md */
+.ui-btn.ui-btn--primary.ui-btn--md .ui-btn__label {
+  color: #FFF;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px;
+}
+.ui-btn.ui-btn--primary.ui-btn--md .ui-btn__icon > img,
+.ui-btn.ui-btn--primary.ui-btn--md .ui-btn__icon > svg {
+  width: 10px;
+  height: 18px;
+}
+
+.ui-input { display: flex; flex-direction: column; gap: 6px; width: 100%; }
+.ui-input__label { font-size: 12px; color: #555; }
+.ui-input__field {
+  width: 100%;
+  border: 1px solid #6B6B6B;
+  border-radius: 100px;
+  padding: 10px 12px;
+  background: #fff;
+}
+
+.ui-link { display: inline-flex; align-items: center; gap: 8px; color: #121212; }
+.ui-link__icon { display: inline-flex; width: 18px; height: 18px; }
+.ui-link__label { font-size: 14px; }
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .ui-btn { transition: none; }
+}
+
+
