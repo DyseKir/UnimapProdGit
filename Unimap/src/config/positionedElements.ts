@@ -78,27 +78,8 @@ export const corridorGroups = {
         corridor: 1
       },
       {
-        id: 'stairs1',
+        id: 'Room5',
         number: 5,
-        x: 1165,
-        y: 3014,
-        width: 78,
-        height: 164,
-        rotation: 0,
-        color: '#BFF355',
-        borderColor: '#A8D444',
-        borderWidth: 2,
-        borderRadius: 8,
-        fontSize: 24,
-        fontColor: '#ffffff',
-        category: 'stairs',
-        zIndex: 1,
-        visible: true,
-        corridor: 1
-      },
-      {
-        id: 'Room6',
-        number: 6,
         x: 1482,
         y: 2744,
         width: 138,
@@ -115,8 +96,8 @@ export const corridorGroups = {
         corridor: 1
       }, 
       {
-        id: 'Room7',
-        number: 7,
+        id: 'Room6',
+        number: 6,
         x: 1258,
         y: 2744,
         width: 210,
@@ -134,7 +115,6 @@ export const corridorGroups = {
       },
       {
         id: 'toilet1',
-        number: "toilet1",
         x: 1166,
         y: 2744,
         width: 78,
@@ -151,7 +131,24 @@ export const corridorGroups = {
         visible: true,
         corridor: 1
       },
-      
+      {
+        id: 'stairs1',
+        x: 1165,
+        y: 3014,
+        width: 78,
+        height: 164,
+        rotation: 0,
+        color: '#BFF355',
+        borderColor: '#A8D444',
+        borderWidth: 2,
+        borderRadius: 8,
+        fontSize: 24,
+        fontColor: '#ffffff',
+        category: 'stairs',
+        zIndex: 1,
+        visible: true,
+        corridor: 1
+      },
       ]
   },
   corridor2: {
@@ -159,8 +156,8 @@ export const corridorGroups = {
     rooms: [
       // Комнаты коридора 2 (только уникальные)
       {
-        id: 'Room10',
-        number: 10,
+        id: 'Room7',
+        number: 7,
         x: 2778,
         y: 2316,
         width: 156,
@@ -177,8 +174,8 @@ export const corridorGroups = {
         corridor: 2
       },
       {
-        id: 'Room11',
-        number: 11,
+        id: 'Room8',
+        number: 8,
         x: 2778,
         y: 2112,
         width: 156,
@@ -195,8 +192,8 @@ export const corridorGroups = {
         corridor: 2
       },
       {
-        id: 'Room12',
-        number: 12,
+        id: 'Room9',
+        number: 9,
         x: 2778,
         y: 1826,
         width: 156,
@@ -213,8 +210,8 @@ export const corridorGroups = {
         corridor: 2
       },
       {
-        id: 'Room13',
-        number: 13,
+        id: 'Room10',
+        number: 10,
         x: 2778,
         y: 1614,
         width: 156,
@@ -231,8 +228,8 @@ export const corridorGroups = {
         corridor: 2
       },
       {
-        id: 'Room14',
-        number: 14,
+        id: 'Room11',
+        number: 11,
         x: 2626,
         y: 1388,
         width: 306,
@@ -249,12 +246,12 @@ export const corridorGroups = {
         corridor: 2
       },
       {
-        id: 'Room19',
-        number: 19,
-        x: 2778,
+        id: 'Room12',
+        number: 12,
+        x: 2516,
         y: 1388,
-        width: 306,
-        height: 212,
+        width: 98,
+        height: 188,
         rotation: 0,
         color: '#BFF355',
         borderColor: '#A8D444',
@@ -265,7 +262,25 @@ export const corridorGroups = {
         zIndex: 1,
         visible: true,
         corridor: 2
-      }
+      },
+      {
+        id: 'stairs2',
+        x: 2516,
+        y: 1582,
+        width: 98,
+        height: 196,
+        rotation: 0,
+        color: '#BFF355',
+        borderColor: '#A8D444',
+        borderWidth: 2,
+        borderRadius: 8,
+        fontSize: 24,
+        fontColor: '#ffffff',
+        category: 'stairs',
+        zIndex: 1,
+        visible: true,
+        corridor: 1
+      },
       ]
   },
   corridor3: {
@@ -273,8 +288,8 @@ export const corridorGroups = {
     rooms: [
       // Комнаты коридора 2 (только уникальные)
       {
-        id: 'Room20',
-        number: 20,
+        id: 'Room13',
+        number: 13,
         x: 642,
         y: 2922,
         width: 116,
@@ -291,8 +306,8 @@ export const corridorGroups = {
         corridor: 3
       },
       {
-        id: 'Room21',
-        number: 21,
+        id: 'Room14',
+        number: 14,
         x: 597,
         y: 2685,
         width: 114,
@@ -309,8 +324,8 @@ export const corridorGroups = {
         corridor: 3
       },
       {
-        id: 'Room22',
-        number: 22,
+        id: 'Room15',
+        number: 15,
         x: 535,
         y: 2518,
         width: 116,
@@ -327,8 +342,8 @@ export const corridorGroups = {
         corridor: 3
       },
       {
-        id: 'Room23',
-        number: 23,
+        id: 'Room16',
+        number: 16,
         x: 482,
         y: 2341,
         width: 116,
@@ -345,8 +360,7 @@ export const corridorGroups = {
         corridor: 3
       },
       {
-        id: 'Room24',
-        number: 24,
+        id: 'Buffet',
         x: 446,
         y: 2282,
         width: 116,
@@ -358,13 +372,15 @@ export const corridorGroups = {
         borderRadius: 8,
         fontSize: 24,
         fontColor: '#ffffff',
+        category: 'Buffet',
         zIndex: 1,
         visible: true,
         corridor: 3
+        img: '../sprite/buffet.png'
       },
       {
-         id: 'Room25',
-         number: 25,
+         id: 'Room18',
+         number: 18,
          x: 822,
          y: 2872,
          width: 109,
@@ -381,8 +397,8 @@ export const corridorGroups = {
          corridor: 3
       },
       {
-         id: 'Room26',
-         number: 26,
+         id: 'Room19',
+         number: 19,
          x: 800,
          y: 2808,
          width: 109,
@@ -399,8 +415,8 @@ export const corridorGroups = {
          corridor: 3
       },
       {
-         id: 'Room27',
-         number: 27,
+         id: 'Room20',
+         number: 20,
          x: 762,
          y: 2618,
          width: 109,
@@ -417,8 +433,8 @@ export const corridorGroups = {
          corridor: 3
       },
       {
-         id: 'Room28',
-         number: 28,
+         id: 'Room21',
+         number: 21,
          x: 720,
          y: 2526,
          width: 110,
@@ -435,8 +451,8 @@ export const corridorGroups = {
          corridor: 3
       },
       {
-         id: 'Room29',
-         number: 29,
+         id: 'Room22',
+         number: 22,
          x: 696,
          y: 2466,
          width: 110,
@@ -451,7 +467,43 @@ export const corridorGroups = {
          zIndex: 1,
          visible: true,
          corridor: 3
-      }
+      },
+      {
+         id: 'Room23',
+         number: 23,
+         x: 660,
+         y: 2286,
+         width: 110,
+         height: 180,
+         rotation: -17,
+         color: '#BFF355',
+         borderColor: '#A8D444',
+         borderWidth: 2,
+         borderRadius: 8,
+         fontSize: 24,
+         fontColor: '#ffffff',
+         zIndex: 1,
+         visible: true,
+         corridor: 3
+      },
+      {
+        id: 'stairs3',
+        x: 566,
+        y: 3158,
+        width: 84,
+        height: 48,
+        rotation: -16,
+        color: '#BFF355',
+        borderColor: '#A8D444',
+        borderWidth: 2,
+        borderRadius: 8,
+        fontSize: 24,
+        fontColor: '#ffffff',
+        category: 'stairs',
+        zIndex: 1,
+        visible: true,
+        corridor: 1
+      },
        
       ]
   },
@@ -959,6 +1011,27 @@ export const corridorGroups = {
 
 // Плоский массив для рендерера (обратная совместимость)
 export const squaresConfig: PositionedElementConfig[] = Object.values(corridorGroups)
-  .flatMap(corridor => corridor.rooms);
+.flatMap(corridor =>
+  corridor.rooms.map(room => ({
+    ...room,
+    category: room.category ?? 'regular',
+    number: typeof room.number === 'number' ? room.number : undefined,
+  }))
+);
+
+export interface RegularRoomInfo {
+id: string;
+number: number;
+corridor?: number;
+}
+
+export const regularRooms: RegularRoomInfo[] = squaresConfig
+.filter(room => room.category === 'regular' && typeof room.number === 'number')
+.map(room => ({
+  id: room.id,
+  number: room.number as number,
+  corridor: room.corridor,
+}))
+.sort((a, b) => a.number - b.number);
 
 export default squaresConfig;

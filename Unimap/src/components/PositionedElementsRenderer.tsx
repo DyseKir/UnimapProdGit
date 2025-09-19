@@ -40,8 +40,8 @@ export const PositionedElementsRenderer: React.FC<PositionedElementsRendererProp
     const squares = squaresConfig.map(squareConfig => {
       const isHighlighted = highlightedRoomId === squareConfig.id;
       const isHovered = hoveredElementId === squareConfig.id;
-      const category = (squareConfig as any).category as ('regular'|'toilet'|'stairs'|undefined);
-      let resolvedImgSrc: string | undefined = (squareConfig as any).imgSrc || (squareConfig as any).Img;
+const category = squareConfig.category;
+      let resolvedImgSrc: string | undefined = squareConfig.imgSrc;
       if (!resolvedImgSrc) {
         if (category === 'toilet') {
           resolvedImgSrc = './src/Sprite/wc.png';

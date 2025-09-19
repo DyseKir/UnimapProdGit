@@ -11,7 +11,7 @@ import RegisterContainer from '../RegisterContainer/RegisterContainer';
 import BuildingSelector from '../BuildingSelector/BuildingSelector';
 import LupaIcon from '../../../Sprite/Lupa.svg';
 import roomHighlightService from '../../../services/RoomHighlightService';
-
+import { regularRooms } from '../../../config/positionedElements';
 const MenuBar: React.FC = () => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -23,33 +23,19 @@ const MenuBar: React.FC = () => {
   const [isSearchDropdownOpen, setIsSearchDropdownOpen] = useState(false);
 
   // Mock data for rooms - replace with actual data from your config
-  const rooms = [
-    { id: 'Room1', number: 1, corridor: 1 },
-    { id: 'Room2', number: 2, corridor: 1 },
-    { id: 'Room3', number: 3, corridor: 1 },
-    { id: 'Room4', number: 4, corridor: 1 },
-    { id: 'Room5', number: 5, corridor: 1 },
-    { id: 'Room6', number: 6, corridor: 1 },
-    { id: 'Room7', number: 7, corridor: 1 },
-    { id: 'Room8', number: 8, corridor: 1 },
-    { id: 'Room10', number: 10, corridor: 1 },
-    { id: 'Room11', number: 11, corridor: 1 },
-    { id: 'Room12', number: 12, corridor: 1 },
-    { id: 'Room13', number: 13, corridor: 1 },
-    { id: 'Room14', number: 14, corridor: 1 },
-  ];
+  const rooms = regularRooms;
 
   // Filter rooms based on search query
   const filteredRooms = useMemo(() => {
     if (!searchQuery.trim()) return [];
-    
+
     return rooms
-      .filter(room => 
+      .filter(room =>
         room.number.toString().includes(searchQuery.trim()) ||
         room.id.toLowerCase().includes(searchQuery.toLowerCase())
       )
       .sort((a, b) => a.number - b.number);
-  }, [searchQuery]);
+  }, [rooms, searchQuery]);
 
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;

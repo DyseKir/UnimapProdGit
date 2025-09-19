@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import './RouteInput.css';
 import Button from '../UI/Button';
 import ArrowIcon from '../../../Sprite/drop-down-arrow.svg';
-import squaresConfig from '../../../config/positionedElements';
+import { regularRooms } from '../../../config/positionedElements';
 
 interface RouteInputProps {
   fromValue: string;
@@ -19,22 +19,14 @@ const RouteInput: React.FC<RouteInputProps> = ({
 }) => {
   const [isFromDropdownOpen, setIsFromDropdownOpen] = useState(false);
   const [isToDropdownOpen, setIsToDropdownOpen] = useState(false);
-  const [availableRooms, setAvailableRooms] = useState<Array<{id: string, number: number}>>([]);
+  const availableRooms = regularRooms;
   
   const fromListRef = useRef<HTMLUListElement>(null);
   const toListRef = useRef<HTMLUListElement>(null);
   const fromRootRef = useRef<HTMLDivElement>(null);
   const toRootRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    // Получаем список доступных комнат для выбора
-    const rooms = squaresConfig.map(room => ({
-      id: room.id,
-      number: room.number || 0
-    })).sort((a, b) => a.number - b.number);
-    
-    setAvailableRooms(rooms);
-  }, []);
+
 
   const handleFromSelect = (roomId: string) => {
     onFromChange(roomId);
