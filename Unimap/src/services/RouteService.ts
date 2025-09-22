@@ -270,6 +270,27 @@ class RouteService {
     // Находим точки соединения
     fromPoint = this.findRoomSideCenter(fromRoom, fromSide);
     toPoint = this.findRoomSideCenter(toRoom, toSide);
+
+   // Формируем маршрут с прямыми углами, чтобы избежать диагональных линий
+   const fallbackViaPoints: RoutePoint[] = [];
+   const pushViaPoint = (point: RoutePoint) => {
+     const previous = fallbackViaPoints.length > 0 ? fallbackViaPoints[fallbackViaPoints.length - 1] : fromPoint;
+     const isDuplicateOfPrevious = previous.x === point.x && previous.y === point.y;
+     const isDuplicateOfDestination = point.x === toPoint.x && point.y === toPoint.y;
+
+     if (!isDuplicateOfPrevious && !isDuplicateOfDestination) {
+       fallbackViaPoints.push(point);
+     }
+   };
+
+   // Добавляем промежуточную точку, если необходимо повернуть маршрут
+   if (fromPoint.x !== toPoint.x && fromPoint.y !== toPoint.y) {
+     pushViaPoint({ x: fromPoint.x, y: toPoint.y });
+   }
+
+   viaPoints = fallbackViaPoints.length > 0 ? fallbackViaPoints : undefined;
+
+    
   }
 
     // Создаем маршрут
