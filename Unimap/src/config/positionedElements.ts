@@ -98,7 +98,7 @@ export const corridorGroups = {
         zIndex: 1,
         visible: true,
        corridor: 1,
-        corridorEntrySide: 'top'
+        corridorEntrySide: 'bottom'
       }, 
       {
         id: 'Room6',
@@ -117,7 +117,7 @@ export const corridorGroups = {
         zIndex: 1,
         visible: true,
        corridor: 1,
-        corridorEntrySide: 'top'
+         corridorEntrySide: 'bottom'
       },
       {
         id: 'toilet1',
@@ -136,7 +136,7 @@ export const corridorGroups = {
         zIndex: 1,
         visible: true,
        corridor: 1,
-        corridorEntrySide: 'top'
+          corridorEntrySide: 'bottom'
       },
       {
         id: 'stairs1',

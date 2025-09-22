@@ -76,27 +76,90 @@ class RouteService {
     const centers = corridorRooms.map(room => this.getRoomCenter(room));
 
     if (orientation === 'horizontal') {
-      const minY = Math.min(...centers.map(center => center.y));
-      const maxY = Math.max(...centers.map(center => center.y));
-      return (minY + maxY) / 2;
+      const minCenterY = Math.min(...centers.map(center => center.y));
+      const maxCenterY = Math.max(...centers.map(center => center.y));
+      const centerReference = (minCenterY + maxCenterY) / 2;
+
+      const entryYPositions = corridorRooms.map(room => {
+        if (room.corridorEntrySide === 'top') {
+          return room.y;
+        }
+
+        if (room.corridorEntrySide === 'bottom') {
+          return room.y + (room.height || 0);
+        }
+
+        const roomCenterY = this.getRoomCenter(room).y;
+        return roomCenterY < centerReference
+          ? room.y + (room.height || 0)
+          : room.y;
+      });
+
+      const minEntryY = Math.min(...entryYPositions);
+      const maxEntryY = Math.max(...entryYPositions);
+
+      if (minEntryY === maxEntryY) {
+        return centerReference;
+      }
+
+      return (minEntryY + maxEntryY) / 2;
+    }
+    const minCenterX = Math.min(...centers.map(center => center.x));
+    const maxCenterX = Math.max(...centers.map(center => center.x));
+    const centerReference = (minCenterX + maxCenterX) / 2;
+
+    const entryXPositions = corridorRooms.map(room => {
+      if (room.corridorEntrySide === 'left') {
+        return room.x;
+      }
+
+      if (room.corridorEntrySide === 'right') {
+        return room.x + (room.width || 0);
+      }
+
+      const roomCenterX = this.getRoomCenter(room).x;
+      return roomCenterX < centerReference
+        ? room.x + (room.width || 0)
+        : room.x;
+    });
+
+    const minEntryX = Math.min(...entryXPositions);
+    const maxEntryX = Math.max(...entryXPositions);
+
+    if (minEntryX === maxEntryX) {
+      return centerReference;
     }
 
-    const minX = Math.min(...centers.map(center => center.x));
-    const maxX = Math.max(...centers.map(center => center.x));
-    return (minX + maxX) / 2;
+    return (minEntryX + maxEntryX) / 2;
   }
-
   private getCorridorEntryPoint(
     room: PositionedElementConfig,
     orientation: 'horizontal' | 'vertical',
     corridorLine: number,
   ): RoutePoint {
     if (orientation === 'horizontal') {
+      if (room.corridorEntrySide === 'top' || room.corridorEntrySide === 'bottom') {
+        return {
+          x: room.x + (room.width || 0) / 2,
+          y:
+            room.corridorEntrySide === 'top'
+              ? room.y
+              : room.y + (room.height || 0),
+        };
+      }
+
       const roomCenter = this.getRoomCenter(room);
       const isRoomAboveCorridor = roomCenter.y < corridorLine;
       return {
         x: room.x + (room.width || 0) / 2,
         y: isRoomAboveCorridor ? room.y + (room.height || 0) : room.y,
+      };
+    }
+
+    if (room.corridorEntrySide === 'left' || room.corridorEntrySide === 'right') {
+      return {
+        x: room.corridorEntrySide === 'left' ? room.x : room.x + (room.width || 0),
+        y: room.y + (room.height || 0) / 2,
       };
     }
 
@@ -107,7 +170,6 @@ class RouteService {
       y: room.y + (room.height || 0) / 2,
     };
   }
- 
   private getCorridorCenterPoint(
     entry: RoutePoint,
     corridorLine: number,
@@ -160,7 +222,6 @@ class RouteService {
       corridorLine,
       orientation,
     );
-
     const via: RoutePoint[] = [];
     const pushViaPoint = (point: RoutePoint) => {
       const previous = via.length > 0 ? via[via.length - 1] : fromEntry;
