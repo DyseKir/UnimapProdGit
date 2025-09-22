@@ -24,6 +24,7 @@ export interface Route {
 }
 
 class RouteService {
+  private static readonly MIN_CORRIDOR_OFFSET = 40;
   private routes: Route[] = [];
   private listeners: ((routes: Route[]) => void)[] = [];
 
@@ -107,47 +108,20 @@ class RouteService {
     };
   }
  
-  private getCorridorOffsetPoint(
+  private getCorridorCenterPoint(
     entry: RoutePoint,
-    room: PositionedElementConfig,
     corridorLine: number,
     orientation: 'horizontal' | 'vertical',
   ): RoutePoint {
-    const roomCenter = this.getRoomCenter(room);
-
     if (orientation === 'horizontal') {
-      const rawDelta = corridorLine - entry.y;
-      let direction = rawDelta === 0 ? 0 : Math.sign(rawDelta);
-
-      if (direction === 0) {
-        direction = roomCenter.y >= entry.y ? 1 : -1;
-      }
-
-      const offsetDistance = Math.max(
-        Math.abs(rawDelta),
-        RouteService.MIN_CORRIDOR_OFFSET,
-      );
-
       return {
         x: entry.x,
-        y: entry.y + direction * offsetDistance,
+        y: corridorLine,
       };
     }
 
-    const rawDelta = corridorLine - entry.x;
-    let direction = rawDelta === 0 ? 0 : Math.sign(rawDelta);
-
-    if (direction === 0) {
-      direction = roomCenter.x >= entry.x ? 1 : -1;
-    }
-
-    const offsetDistance = Math.max(
-      Math.abs(rawDelta),
-      RouteService.MIN_CORRIDOR_OFFSET,
-    );
-
     return {
-      x: entry.x + direction * offsetDistance,
+      x: corridorLine,
       y: entry.y,
     };
   }
@@ -176,16 +150,13 @@ class RouteService {
     const corridorLine = this.getCorridorLine(corridorRooms, orientation);
     const fromEntry = this.getCorridorEntryPoint(fromRoom, orientation, corridorLine);
     const toEntry = this.getCorridorEntryPoint(toRoom, orientation, corridorLine);
-
-    const fromOffset = this.getCorridorOffsetPoint(
+    const fromCorridorPoint = this.getCorridorCenterPoint(
       fromEntry,
-      fromRoom,
       corridorLine,
       orientation,
     );
-    const toOffset = this.getCorridorOffsetPoint(
+    const toCorridorPoint = this.getCorridorCenterPoint(
       toEntry,
-      toRoom,
       corridorLine,
       orientation,
     );
@@ -199,23 +170,19 @@ class RouteService {
     };
 
     if (orientation === 'horizontal') {
-      pushViaPoint(fromOffset);
+      pushViaPoint(fromCorridorPoint);
 
-      const midpointX = (fromOffset.x + toOffset.x) / 2;
-      pushViaPoint({ x: midpointX, y: fromOffset.y });
+      const midpointX = (fromCorridorPoint.x + toCorridorPoint.x) / 2;
+      pushViaPoint({ x: midpointX, y: corridorLine });
 
-      pushViaPoint({ x: toOffset.x, y: fromOffset.y });
-
-      pushViaPoint(toOffset);
+      pushViaPoint(toCorridorPoint);
     } else {
-      pushViaPoint(fromOffset);
+      pushViaPoint(fromCorridorPoint);
 
-      const midpointY = (fromOffset.y + toOffset.y) / 2;
-      pushViaPoint({ x: fromOffset.x, y: midpointY });
+      const midpointY = (fromCorridorPoint.y + toCorridorPoint.y) / 2;
+      pushViaPoint({ x: corridorLine, y: midpointY });
 
-      pushViaPoint({ x: fromOffset.x, y: toOffset.y });
-
-      pushViaPoint(toOffset);
+      pushViaPoint(toCorridorPoint);
     }
 
     return {
