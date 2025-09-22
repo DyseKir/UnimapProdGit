@@ -107,6 +107,24 @@ class RouteService {
     };
   }
 
+  private getCorridorCenterPoint(
+    entry: RoutePoint,
+    corridorLine: number,
+    orientation: 'horizontal' | 'vertical',
+  ): RoutePoint {
+    if (orientation === 'horizontal') {
+      return {
+        x: entry.x,
+        y: corridorLine,
+      };
+    }
+
+    return {
+      x: corridorLine,
+      y: entry.y,
+    };
+  }
+
   private buildCorridorPath(
     fromRoom: PositionedElementConfig,
     toRoom: PositionedElementConfig,
@@ -131,6 +149,16 @@ class RouteService {
     const corridorLine = this.getCorridorLine(corridorRooms, orientation);
     const fromEntry = this.getCorridorEntryPoint(fromRoom, orientation, corridorLine);
     const toEntry = this.getCorridorEntryPoint(toRoom, orientation, corridorLine);
+    const fromCorridorPoint = this.getCorridorCenterPoint(
+      fromEntry,
+      corridorLine,
+      orientation,
+    );
+    const toCorridorPoint = this.getCorridorCenterPoint(
+      toEntry,
+      corridorLine,
+      orientation,
+    );
 
     const via: RoutePoint[] = [];
     const pushViaPoint = (point: RoutePoint) => {
@@ -141,11 +169,19 @@ class RouteService {
     };
 
     if (orientation === 'horizontal') {
-      pushViaPoint({ x: fromEntry.x, y: corridorLine });
-      pushViaPoint({ x: toEntry.x, y: corridorLine });
+      pushViaPoint(fromCorridorPoint);
+
+      const midpointX = (fromCorridorPoint.x + toCorridorPoint.x) / 2;
+      pushViaPoint({ x: midpointX, y: corridorLine });
+
+      pushViaPoint(toCorridorPoint);
     } else {
-      pushViaPoint({ x: corridorLine, y: fromEntry.y });
-      pushViaPoint({ x: corridorLine, y: toEntry.y });
+      pushViaPoint(fromCorridorPoint);
+
+      const midpointY = (fromCorridorPoint.y + toCorridorPoint.y) / 2;
+      pushViaPoint({ x: corridorLine, y: midpointY });
+
+      pushViaPoint(toCorridorPoint);
     }
 
     if (via.length > 0) {
@@ -252,50 +288,58 @@ class RouteService {
       console.warn('RouteService: Ошибка при построении маршрута через маяки:', error);
     }
 
-  // Строим маршрут по коридору (если возможно)
-  const corridorPath = this.buildCorridorPath(fromRoom, toRoom, rooms);
+    if (beaconRoute && (beaconRoute.path.length < 2 || !Number.isFinite(beaconRoute.totalDistance))) {
+      console.warn('RouteService: Маршрут через маяки некорректный, будет использован маршрут по коридору', beaconRoute);
+      beaconRoute = null;
+    }
 
-  let fromPoint: RoutePoint;
-  let toPoint: RoutePoint;
-  let viaPoints: RoutePoint[] | undefined;
+    // Строим маршрут по коридору (если возможно)
+    const corridorPath = this.buildCorridorPath(fromRoom, toRoom, rooms);
 
-  if (corridorPath) {
-    fromPoint = corridorPath.from;
-    toPoint = corridorPath.to;
-    viaPoints = corridorPath.via;
-  } else {
-    // Определяем оптимальные стороны для соединения (fallback)
-    const { fromSide, toSide } = this.determineOptimalSide(fromRoom, toRoom);
+    let fromPoint: RoutePoint;
+    let toPoint: RoutePoint;
+    let viaPoints: RoutePoint[] | undefined;
 
-    // Находим точки соединения
-    fromPoint = this.findRoomSideCenter(fromRoom, fromSide);
-    toPoint = this.findRoomSideCenter(toRoom, toSide);
+    if (corridorPath) {
+      fromPoint = corridorPath.from;
+      toPoint = corridorPath.to;
+      viaPoints = corridorPath.via;
+    } else {
+      // Определяем оптимальные стороны для соединения (fallback)
+      const { fromSide, toSide } = this.determineOptimalSide(fromRoom, toRoom);
 
-   // Формируем маршрут с прямыми углами, чтобы избежать диагональных линий
-   const fallbackViaPoints: RoutePoint[] = [];
-   const pushViaPoint = (point: RoutePoint) => {
-     const previous = fallbackViaPoints.length > 0 ? fallbackViaPoints[fallbackViaPoints.length - 1] : fromPoint;
-     const isDuplicateOfPrevious = previous.x === point.x && previous.y === point.y;
-     const isDuplicateOfDestination = point.x === toPoint.x && point.y === toPoint.y;
+      // Находим точки соединения
+      fromPoint = this.findRoomSideCenter(fromRoom, fromSide);
+      toPoint = this.findRoomSideCenter(toRoom, toSide);
 
-     if (!isDuplicateOfPrevious && !isDuplicateOfDestination) {
-       fallbackViaPoints.push(point);
-     }
-   };
+      // Формируем маршрут с прямыми углами, чтобы избежать диагональных линий
+      const fallbackViaPoints: RoutePoint[] = [];
+      const pushViaPoint = (point: RoutePoint) => {
+        const previous = fallbackViaPoints.length > 0 ? fallbackViaPoints[fallbackViaPoints.length - 1] : fromPoint;
+        const isDuplicateOfPrevious = previous.x === point.x && previous.y === point.y;
+        const isDuplicateOfDestination = point.x === toPoint.x && point.y === toPoint.y;
 
-   // Добавляем промежуточную точку, если необходимо повернуть маршрут
-   if (fromPoint.x !== toPoint.x && fromPoint.y !== toPoint.y) {
-     pushViaPoint({ x: fromPoint.x, y: toPoint.y });
-   }
+        if (!isDuplicateOfPrevious && !isDuplicateOfDestination) {
+          fallbackViaPoints.push(point);
+        }
+      };
 
-   viaPoints = fallbackViaPoints.length > 0 ? fallbackViaPoints : undefined;
+      // Добавляем промежуточную точку, если необходимо повернуть маршрут
+      if (fromPoint.x !== toPoint.x && fromPoint.y !== toPoint.y) {
+        pushViaPoint({ x: fromPoint.x, y: toPoint.y });
+      }
 
-    
-  }
+      viaPoints = fallbackViaPoints.length > 0 ? fallbackViaPoints : undefined;
+    }
 
     // Создаем маршрут
+    const routeId = `route_${fromRoomId}_${toRoomId}`;
+
+    // Remove existing route between the same rooms so ids stay unique
+    this.routes = this.routes.filter(existingRoute => existingRoute.id !== routeId);
+
     const route: Route = {
-      id: `route_${fromRoomId}_${toRoomId}`,
+      id: routeId,
       fromRoom: fromRoomId,
       toRoom: toRoomId,
       line: {
