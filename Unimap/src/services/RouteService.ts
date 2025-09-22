@@ -106,6 +106,51 @@ class RouteService {
       y: room.y + (room.height || 0) / 2,
     };
   }
+ 
+  private getCorridorOffsetPoint(
+    entry: RoutePoint,
+    room: PositionedElementConfig,
+    corridorLine: number,
+    orientation: 'horizontal' | 'vertical',
+  ): RoutePoint {
+    const roomCenter = this.getRoomCenter(room);
+
+    if (orientation === 'horizontal') {
+      const rawDelta = corridorLine - entry.y;
+      let direction = rawDelta === 0 ? 0 : Math.sign(rawDelta);
+
+      if (direction === 0) {
+        direction = roomCenter.y >= entry.y ? 1 : -1;
+      }
+
+      const offsetDistance = Math.max(
+        Math.abs(rawDelta),
+        RouteService.MIN_CORRIDOR_OFFSET,
+      );
+
+      return {
+        x: entry.x,
+        y: entry.y + direction * offsetDistance,
+      };
+    }
+
+    const rawDelta = corridorLine - entry.x;
+    let direction = rawDelta === 0 ? 0 : Math.sign(rawDelta);
+
+    if (direction === 0) {
+      direction = roomCenter.x >= entry.x ? 1 : -1;
+    }
+
+    const offsetDistance = Math.max(
+      Math.abs(rawDelta),
+      RouteService.MIN_CORRIDOR_OFFSET,
+    );
+
+    return {
+      x: entry.x + direction * offsetDistance,
+      y: entry.y,
+    };
+  }
 
   private buildCorridorPath(
     fromRoom: PositionedElementConfig,
@@ -132,6 +177,19 @@ class RouteService {
     const fromEntry = this.getCorridorEntryPoint(fromRoom, orientation, corridorLine);
     const toEntry = this.getCorridorEntryPoint(toRoom, orientation, corridorLine);
 
+    const fromOffset = this.getCorridorOffsetPoint(
+      fromEntry,
+      fromRoom,
+      corridorLine,
+      orientation,
+    );
+    const toOffset = this.getCorridorOffsetPoint(
+      toEntry,
+      toRoom,
+      corridorLine,
+      orientation,
+    );
+
     const via: RoutePoint[] = [];
     const pushViaPoint = (point: RoutePoint) => {
       const previous = via.length > 0 ? via[via.length - 1] : fromEntry;
@@ -141,19 +199,23 @@ class RouteService {
     };
 
     if (orientation === 'horizontal') {
-      pushViaPoint({ x: fromEntry.x, y: corridorLine });
+      pushViaPoint(fromOffset);
 
-      const midpointX = (fromEntry.x + toEntry.x) / 2;
-      pushViaPoint({ x: midpointX, y: corridorLine });
+      const midpointX = (fromOffset.x + toOffset.x) / 2;
+      pushViaPoint({ x: midpointX, y: fromOffset.y });
 
-      pushViaPoint({ x: toEntry.x, y: corridorLine });
+      pushViaPoint({ x: toOffset.x, y: fromOffset.y });
+
+      pushViaPoint(toOffset);
     } else {
-      pushViaPoint({ x: corridorLine, y: fromEntry.y });
+      pushViaPoint(fromOffset);
 
-      const midpointY = (fromEntry.y + toEntry.y) / 2;
-      pushViaPoint({ x: corridorLine, y: midpointY });
+      const midpointY = (fromOffset.y + toOffset.y) / 2;
+      pushViaPoint({ x: fromOffset.x, y: midpointY });
 
-      pushViaPoint({ x: corridorLine, y: toEntry.y });
+      pushViaPoint({ x: fromOffset.x, y: toOffset.y });
+
+      pushViaPoint(toOffset);
     }
 
     return {
