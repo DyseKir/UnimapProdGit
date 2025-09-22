@@ -21,7 +21,8 @@ export const corridorGroups = {
         fontColor: '#ffffff',
         zIndex: 1,
         visible: true,
-        corridor: 1
+       corridor: 1,
+        corridorEntrySide: 'top'
       },
       {
         id: 'Room2',
@@ -39,7 +40,8 @@ export const corridorGroups = {
         fontColor: '#ffffff',
         zIndex: 1,
         visible: true,
-        corridor: 1
+       corridor: 1,
+        corridorEntrySide: 'top'
       },
       {
         id: 'Room3',
@@ -57,7 +59,8 @@ export const corridorGroups = {
         fontColor: '#ffffff',
         zIndex: 1,
         visible: true,
-        corridor: 1
+       corridor: 1,
+        corridorEntrySide: 'top'
       },
       {
         id: 'Room4',
@@ -75,7 +78,8 @@ export const corridorGroups = {
         fontColor: '#ffffff',
         zIndex: 1,
         visible: true,
-        corridor: 1
+       corridor: 1,
+        corridorEntrySide: 'top'
       },
       {
         id: 'Room5',
@@ -93,7 +97,8 @@ export const corridorGroups = {
         fontColor: '#ffffff',
         zIndex: 1,
         visible: true,
-        corridor: 1
+       corridor: 1,
+        corridorEntrySide: 'top'
       }, 
       {
         id: 'Room6',
@@ -111,7 +116,8 @@ export const corridorGroups = {
         fontColor: '#ffffff',
         zIndex: 1,
         visible: true,
-        corridor: 1
+       corridor: 1,
+        corridorEntrySide: 'top'
       },
       {
         id: 'toilet1',
@@ -129,7 +135,8 @@ export const corridorGroups = {
         category: 'toilet',
         zIndex: 1,
         visible: true,
-        corridor: 1
+       corridor: 1,
+        corridorEntrySide: 'top'
       },
       {
         id: 'stairs1',
@@ -147,7 +154,8 @@ export const corridorGroups = {
         category: 'stairs',
         zIndex: 1,
         visible: true,
-        corridor: 1
+       corridor: 1,
+        corridorEntrySide: 'top'
       },
       ]
   },
@@ -279,7 +287,7 @@ export const corridorGroups = {
         category: 'stairs',
         zIndex: 1,
         visible: true,
-        corridor: 1
+       corridor: 2,
       },
       ]
   },
@@ -501,7 +509,8 @@ export const corridorGroups = {
         category: 'stairs',
         zIndex: 1,
         visible: true,
-        corridor: 1
+       corridor: 1,
+        corridorEntrySide: 'top'
       },
        
       ]

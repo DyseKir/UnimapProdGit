@@ -23,6 +23,7 @@ export interface PositionedElementConfig {
   onHover?: () => void;
   visible?: boolean;
   corridor?: number; // corridor number for grouping
+  corridorEntrySide?: 'top' | 'bottom' | 'left' | 'right';
 }
 
 export class PositionedElementsService {
