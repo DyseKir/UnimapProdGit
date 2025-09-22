@@ -212,14 +212,28 @@ class RouteService {
     const corridorLine = this.getCorridorLine(corridorRooms, orientation);
     const fromEntry = this.getCorridorEntryPoint(fromRoom, orientation, corridorLine);
     const toEntry = this.getCorridorEntryPoint(toRoom, orientation, corridorLine);
+    const corridorLineForPair = (() => {
+      if (orientation === 'horizontal') {
+        const pairLine = (fromEntry.y + toEntry.y) / 2;
+        return Math.abs(pairLine - fromEntry.y) < 0.5 && Math.abs(pairLine - toEntry.y) < 0.5
+          ? corridorLine
+          : pairLine;
+      }
+
+      const pairLine = (fromEntry.x + toEntry.x) / 2;
+      return Math.abs(pairLine - fromEntry.x) < 0.5 && Math.abs(pairLine - toEntry.x) < 0.5
+        ? corridorLine
+        : pairLine;
+    })();
+
     const fromCorridorPoint = this.getCorridorCenterPoint(
       fromEntry,
-      corridorLine,
+      corridorLineForPair,
       orientation,
     );
     const toCorridorPoint = this.getCorridorCenterPoint(
       toEntry,
-      corridorLine,
+      corridorLineForPair,
       orientation,
     );
     const via: RoutePoint[] = [];
