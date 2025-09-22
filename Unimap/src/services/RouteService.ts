@@ -142,17 +142,18 @@ class RouteService {
 
     if (orientation === 'horizontal') {
       pushViaPoint({ x: fromEntry.x, y: corridorLine });
+
+      const midpointX = (fromEntry.x + toEntry.x) / 2;
+      pushViaPoint({ x: midpointX, y: corridorLine });
+
       pushViaPoint({ x: toEntry.x, y: corridorLine });
     } else {
       pushViaPoint({ x: corridorLine, y: fromEntry.y });
-      pushViaPoint({ x: corridorLine, y: toEntry.y });
-    }
 
-    if (via.length > 0) {
-      const lastPoint = via[via.length - 1];
-      if (lastPoint.x === toEntry.x && lastPoint.y === toEntry.y) {
-        via.pop();
-      }
+      const midpointY = (fromEntry.y + toEntry.y) / 2;
+      pushViaPoint({ x: corridorLine, y: midpointY });
+
+      pushViaPoint({ x: corridorLine, y: toEntry.y });
     }
 
     return {
