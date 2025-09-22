@@ -103,17 +103,33 @@ export const RouteRenderer: React.FC<RouteRendererProps> = ({
               );
             })
           ) : (
-            // Fallback - прямая линия между комнатами
-            <line
-              x1={route.line.from.x}
-              y1={route.line.from.y}
-              x2={route.line.to.x}
-              y2={route.line.to.y}
-              stroke="#FF6B6B"
-              strokeWidth="3"
-              strokeDasharray={route.line.type === 'dashed' ? '10,5' : 'none'}
-              markerEnd={`url(#arrowhead-${route.id})`}
-            />
+            // Fallback - маршрут через коридор или прямая линия
+            (() => {
+              const points = [
+                route.line.from,
+                ...(route.line.via || []),
+                route.line.to,
+              ];
+
+              return points.slice(1).map((point, index) => {
+                const prevPoint = points[index];
+                const isLastSegment = index === points.length - 2;
+
+                return (
+                  <line
+                    key={`${route.id}-fallback-${index}`}
+                    x1={prevPoint.x}
+                    y1={prevPoint.y}
+                    x2={point.x}
+                    y2={point.y}
+                    stroke="#FF6B6B"
+                    strokeWidth="3"
+                    strokeDasharray={route.line.type === 'dashed' ? '10,5' : 'none'}
+                    markerEnd={isLastSegment ? `url(#arrowhead-${route.id})` : 'none'}
+                  />
+                );
+              });
+            })()
           )}
         </svg>
       ))}
