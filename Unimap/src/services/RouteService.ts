@@ -270,7 +270,7 @@ class RouteService {
       pushViaPoint(fromCorridorPoint);
 
       const midpointY = (fromCorridorPoint.y + toCorridorPoint.y) / 2;
-      pushViaPoint({ x: effectiveCorridorLine, y: midpointY });
+      pushViaPoint({ x: effectiveCorridorLine, y: midpointY }); 
 
       pushViaPoint(toCorridorPoint);
     }
@@ -421,7 +421,10 @@ class RouteService {
 
 
   // Remove existing route between the same rooms so ids stay unique
-  this.routes = this.routes.filter(existingRoute => existingRoute.id !== routeId);
+// Remove existing routes so only the latest route remains visible
+    if (this.routes.length > 0) {
+      this.routes = [];
+    }
     // Создаем маршрут
     const route: Route = {
       id: routeId,
