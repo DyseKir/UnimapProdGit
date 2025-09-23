@@ -202,17 +202,19 @@
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   z-index: 1000;
-  max-height: 264px; /* 6 items * 44px height each */
-  overflow-y: auto;
+  max-height: 0; /* Не занимает место, когда закрыт */
+  overflow: hidden; /* Прячем содержимое при закрытии */
+  transition: opacity 0.2s ease, visibility 0.2s ease, max-height 0.2s ease;
   margin-top: 4px;
   opacity: 0; /* Полностью прозрачный когда закрыт */
   visibility: hidden; /* Полностью скрыт когда закрыт */
-  transition: opacity 0.2s ease, visibility 0.2s ease;
 }
 
 .search-dropdown.show {
   opacity: 1; /* Видимый когда показан */
   visibility: visible; /* Видимый когда показан */
+  max-height: 264px; /* 6 items * 44px height each */
+  overflow-y: auto;
 }
 
 /* Custom scrollbar for search dropdown */
