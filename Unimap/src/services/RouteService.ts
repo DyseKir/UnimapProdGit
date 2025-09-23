@@ -212,28 +212,14 @@ class RouteService {
     const corridorLine = this.getCorridorLine(corridorRooms, orientation);
     const fromEntry = this.getCorridorEntryPoint(fromRoom, orientation, corridorLine);
     const toEntry = this.getCorridorEntryPoint(toRoom, orientation, corridorLine);
-    const corridorLineForPair = (() => {
-      if (orientation === 'horizontal') {
-        const pairLine = (fromEntry.y + toEntry.y) / 2;
-        return Math.abs(pairLine - fromEntry.y) < 0.5 && Math.abs(pairLine - toEntry.y) < 0.5
-          ? corridorLine
-          : pairLine;
-      }
-
-      const pairLine = (fromEntry.x + toEntry.x) / 2;
-      return Math.abs(pairLine - fromEntry.x) < 0.5 && Math.abs(pairLine - toEntry.x) < 0.5
-        ? corridorLine
-        : pairLine;
-    })();
-
     const fromCorridorPoint = this.getCorridorCenterPoint(
       fromEntry,
-      corridorLineForPair,
+      corridorLine,
       orientation,
     );
     const toCorridorPoint = this.getCorridorCenterPoint(
       toEntry,
-      corridorLineForPair,
+      corridorLine,
       orientation,
     );
     const via: RoutePoint[] = [];
@@ -248,14 +234,14 @@ class RouteService {
       pushViaPoint(fromCorridorPoint);
 
       const midpointX = (fromCorridorPoint.x + toCorridorPoint.x) / 2;
-      pushViaPoint({ x: midpointX, y: corridorLine });
+      pushViaPoint({ x: midpointX, y: corridorLineForPair });
 
       pushViaPoint(toCorridorPoint);
     } else {
       pushViaPoint(fromCorridorPoint);
 
       const midpointY = (fromCorridorPoint.y + toCorridorPoint.y) / 2;
-      pushViaPoint({ x: corridorLine, y: midpointY });
+      pushViaPoint({ x: corridorLineForPair, y: midpointY });
 
       pushViaPoint(toCorridorPoint);
     }
