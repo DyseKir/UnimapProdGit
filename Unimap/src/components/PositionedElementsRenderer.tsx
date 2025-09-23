@@ -36,6 +36,10 @@ export const PositionedElementsRenderer: React.FC<PositionedElementsRendererProp
   }, []);
 
   useEffect(() => {
+    const primaryColor = '#39A39B';
+    const primaryBorderColor = '#2d8a84';
+    const highlightColor = '#5FD1C9';
+
     // Load squares from config and apply hover effects
     const squares = squaresConfig.map(squareConfig => {
       const isHighlighted = highlightedRoomId === squareConfig.id;
@@ -65,20 +69,20 @@ export const PositionedElementsRenderer: React.FC<PositionedElementsRendererProp
             position: 'absolute',
             inset: 0,
             background: isHighlighted
-              ? '#90EE90'
-  : (squareConfig.color || '#BFF355'),
-            border: `${squareConfig.borderWidth || 2}px solid ${isHighlighted ? '#32CD32' : (squareConfig.borderColor || '#A8D444')}`,
+              ? highlightColor
+              : (squareConfig.color || primaryColor),
+            border: `${squareConfig.borderWidth || 2}px solid ${isHighlighted ? primaryBorderColor : (squareConfig.borderColor || primaryBorderColor)}`,
             borderRadius: `${squareConfig.borderRadius || 8}px`,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: isHighlighted ? '#000' : (squareConfig.fontColor || '#ffffff'),
+            color: isHighlighted ? '#0F3A36' : (squareConfig.fontColor || '#ffffff'),
             fontSize: `${squareConfig.fontSize || 24}px`,
             fontWeight: 'bold',
             userSelect: 'none',
             transition: 'all 0.3s ease',
             opacity: isHovered ? 0.7 : 1,
-            boxShadow: isHighlighted ? '0 0 20px rgba(144, 238, 144, 0.6)' : 'none'
+            boxShadow: isHighlighted ? '0 0 20px rgba(63, 173, 164, 0.6)' : 'none'
           }}>
             {squareConfig.number}
           </div>
