@@ -72,12 +72,12 @@ export const RouteRenderer: React.FC<RouteRendererProps> = ({
               id={`arrowhead-${route.id}`}
               markerWidth="10"
               markerHeight="7"
-              refX="9"
-              refY="3.5"
+              refX={route.flipArrow ? 1 : 9}
+              refY={3.5}
               orient="auto"
             >
               <polygon
-                points="0 0, 10 3.5, 0 7"
+                points={route.flipArrow ? '10 0, 0 3.5, 10 7' : '0 0, 10 3.5, 0 7'}
                 fill="#FF6B6B"
               />
             </marker>

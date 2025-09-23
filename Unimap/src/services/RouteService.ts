@@ -20,6 +20,8 @@ export interface Route {
   toRoom: string;
   line: RouteLine;
   visible: boolean;
+  corridor?: number;
+  flipArrow?: boolean;
   beaconRoute?: BeaconRoute; // Маршрут через маяки
 }
 
@@ -378,6 +380,11 @@ class RouteService {
     }
 
     // Строим маршрут по коридору (если возможно)
+    const sharedCorridor =
+      typeof fromRoom.corridor === 'number' && fromRoom.corridor === toRoom.corridor
+        ? fromRoom.corridor
+        : undefined;
+
     const corridorPath = this.buildCorridorPath(fromRoom, toRoom, rooms);
 
     let fromPoint: RoutePoint;
@@ -434,6 +441,8 @@ if (this.routes.length > 0) {
         via: viaPoints, // По умолчанию пунктирная линия
       },
       visible: true,
+      corridor: sharedCorridor,
+      flipArrow: sharedCorridor === 3,
       beaconRoute: beaconRoute || undefined
     };
 
