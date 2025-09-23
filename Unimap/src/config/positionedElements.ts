@@ -311,7 +311,8 @@ export const corridorGroups = {
         fontColor: '#ffffff',
         zIndex: 1,
         visible: true,
-        corridor: 3
+        corridor: 3,
+        corridorEntrySide: 'bottom'
       },
       {
         id: 'Room14',
@@ -329,7 +330,8 @@ export const corridorGroups = {
         fontColor: '#ffffff',
         zIndex: 1,
         visible: true,
-        corridor: 3
+        corridor: 3,
+        corridorEntrySide: 'bottom'
       },
       {
         id: 'Room15',
@@ -347,7 +349,8 @@ export const corridorGroups = {
         fontColor: '#ffffff',
         zIndex: 1,
         visible: true,
-        corridor: 3
+        corridor: 3,
+        corridorEntrySide: 'bottom'
       },
       {
         id: 'Room16',
@@ -365,7 +368,8 @@ export const corridorGroups = {
         fontColor: '#ffffff',
         zIndex: 1,
         visible: true,
-        corridor: 3
+        corridor: 3,
+        corridorEntrySide: 'bottom'
       },
       {
         id: 'Room17',
@@ -383,7 +387,8 @@ export const corridorGroups = {
         fontColor: '#ffffff',
         zIndex: 1,
         visible: true,
-        corridor: 3
+        corridor: 3,
+        corridorEntrySide: 'bottom'
       },
       {
          id: 'Room18',
@@ -401,7 +406,8 @@ export const corridorGroups = {
          fontColor: '#ffffff',
          zIndex: 1,
          visible: true,
-         corridor: 3
+         corridor: 3,
+        corridorEntrySide: 'top'
       },
       {
          id: 'Room19',
@@ -419,7 +425,8 @@ export const corridorGroups = {
          fontColor: '#ffffff',
          zIndex: 1,
          visible: true,
-         corridor: 3
+         corridor: 3,
+        corridorEntrySide: 'top'
       },
       {
          id: 'Room20',
@@ -437,7 +444,8 @@ export const corridorGroups = {
          fontColor: '#ffffff',
          zIndex: 1,
          visible: true,
-         corridor: 3
+         corridor: 3,
+        corridorEntrySide: 'top'
       },
       {
          id: 'Room21',
@@ -455,7 +463,8 @@ export const corridorGroups = {
          fontColor: '#ffffff',
          zIndex: 1,
          visible: true,
-         corridor: 3
+         corridor: 3,
+        corridorEntrySide: 'top'
       },
       {
          id: 'Room22',
@@ -473,7 +482,8 @@ export const corridorGroups = {
          fontColor: '#ffffff',
          zIndex: 1,
          visible: true,
-         corridor: 3
+         corridor: 3,
+        corridorEntrySide: 'top'
       },
       {
          id: 'Room23',
@@ -491,7 +501,8 @@ export const corridorGroups = {
          fontColor: '#ffffff',
          zIndex: 1,
          visible: true,
-         corridor: 3
+         corridor: 3,
+        corridorEntrySide: 'top'
       },
       {
         id: 'stairs3',
