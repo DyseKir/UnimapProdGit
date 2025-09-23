@@ -418,13 +418,10 @@ class RouteService {
 
     // Создаем маршрут
     const routeId = `route_${fromRoomId}_${toRoomId}`;
-
-
-  // Remove existing route between the same rooms so ids stay unique
 // Remove existing routes so only the latest route remains visible
-    if (this.routes.length > 0) {
-      this.routes = [];
-    }
+if (this.routes.length > 0) {
+  this.clearRoutes();
+}
     // Создаем маршрут
     const route: Route = {
       id: routeId,
