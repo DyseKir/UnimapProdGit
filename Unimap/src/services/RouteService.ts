@@ -187,7 +187,28 @@ class RouteService {
       y: entry.y,
     };
   }
+  private getEffectiveCorridorLine(
+    fromEntry: RoutePoint,
+    toEntry: RoutePoint,
+    baseCorridorLine: number,
+    orientation: 'horizontal' | 'vertical',
+  ): number {
+    if (orientation === 'horizontal') {
+      if (Math.abs(fromEntry.y - toEntry.y) < 0.5) {
+        return fromEntry.y;
+      }
 
+      const pairLine = (fromEntry.y + toEntry.y) / 2;
+      return Math.abs(pairLine - baseCorridorLine) < 0.5 ? baseCorridorLine : pairLine;
+    }
+
+    if (Math.abs(fromEntry.x - toEntry.x) < 0.5) {
+      return fromEntry.x;
+    }
+
+    const pairLine = (fromEntry.x + toEntry.x) / 2;
+    return Math.abs(pairLine - baseCorridorLine) < 0.5 ? baseCorridorLine : pairLine;
+  }
   private buildCorridorPath(
     fromRoom: PositionedElementConfig,
     toRoom: PositionedElementConfig,
@@ -212,16 +233,24 @@ class RouteService {
     const corridorLine = this.getCorridorLine(corridorRooms, orientation);
     const fromEntry = this.getCorridorEntryPoint(fromRoom, orientation, corridorLine);
     const toEntry = this.getCorridorEntryPoint(toRoom, orientation, corridorLine);
-    const fromCorridorPoint = this.getCorridorCenterPoint(
+    const effectiveCorridorLine = this.getEffectiveCorridorLine(
       fromEntry,
-      corridorLine,
-      orientation,
-    );
-    const toCorridorPoint = this.getCorridorCenterPoint(
       toEntry,
       corridorLine,
       orientation,
     );
+
+    const fromCorridorPoint = this.getCorridorCenterPoint(
+      fromEntry,
+      effectiveCorridorLine,
+      orientation,
+    );
+    const toCorridorPoint = this.getCorridorCenterPoint(
+      toEntry,
+      effectiveCorridorLine,
+      orientation,
+    );
+
     const via: RoutePoint[] = [];
     const pushViaPoint = (point: RoutePoint) => {
       const previous = via.length > 0 ? via[via.length - 1] : fromEntry;
@@ -234,14 +263,14 @@ class RouteService {
       pushViaPoint(fromCorridorPoint);
 
       const midpointX = (fromCorridorPoint.x + toCorridorPoint.x) / 2;
-      pushViaPoint({ x: midpointX, y: corridorLineForPair });
+      pushViaPoint({ x: midpointX, y: effectiveCorridorLine });
 
       pushViaPoint(toCorridorPoint);
     } else {
       pushViaPoint(fromCorridorPoint);
 
       const midpointY = (fromCorridorPoint.y + toCorridorPoint.y) / 2;
-      pushViaPoint({ x: corridorLineForPair, y: midpointY });
+      pushViaPoint({ x: effectiveCorridorLine, y: midpointY });
 
       pushViaPoint(toCorridorPoint);
     }
