@@ -1,8 +1,8 @@
 .menu-bar {
   position: fixed;
-  top: 20px;
-  right: 20px;
-  bottom: 20px;
+  top: 16px;
+  right: 16px;
+  bottom: 16px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -14,34 +14,49 @@
   z-index: 10;
   box-sizing: border-box;
   padding: 16px;
-  width: 374px;
+  width: 360px;
   transition: width 0.35s cubic-bezier(0.4,0,0.2,1),
               height 0.35s cubic-bezier(0.4,0,0.2,1),
               padding 0.35s cubic-bezier(0.4,0,0.2,1),
               opacity 0.25s ease;
   transform: scaleX(1);
   opacity: 1;
+  overflow-y: auto;
 }
 
-.menu-bar--large {
-  left: 1526px;
-  height: auto;
+.menu-bar--desktop {
+  width: 380px;
+  padding: 18px;
+  border-radius: 20px;
 }
 
-.menu-bar--medium {
-  left: auto;
-  width: 374px;
+.menu-bar--laptop {
+  width: 320px;
+  padding: 14px;
+  border-radius: 18px;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+}
+
+.menu-bar--tablet {
+  width: 280px;
+  padding: 12px;
   border-radius: 16px;
+  top: 12px;
+  right: 12px;
+  bottom: 12px;
+  max-height: calc(100vh - 24px);
+  overflow-y: auto;
 }
 
-.menu-bar--mobile {
+.menu-bar--phone {
   left: 0;
   right: 0;
   bottom: 0;
   top: auto;
   width: 100vw;
-  min-height: 80px;
-  max-height: 60vh;
+  min-height: 90px;
+  max-height: 65vh;
   padding: 12px;
   border-radius: 20px 20px 0 0;
   overflow-y: auto;
@@ -105,6 +120,8 @@
   gap: 24px;
   width: 100%;
 }
+.menu-bar--tablet .menu-bar__content { gap: 18px; }
+.menu-bar--phone .menu-bar__content { gap: 14px; }
 
 .HeaderContainer {
   display: flex;
@@ -130,6 +147,10 @@
   font-weight: 600;
   line-height: 28px;
 }
+.menu-bar--tablet .LogoImg { width: 42px; height: 34px; }
+.menu-bar--phone .LogoImg { width: 38px; height: 30px; }
+.menu-bar--tablet .LogoText { font-size: 18px; line-height: 24px; }
+.menu-bar--phone .LogoText { font-size: 16px; line-height: 22px; }
 
 
 
@@ -187,6 +208,16 @@
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
   font-size: 14px; font-weight: 400; line-height: 20px;
   background: #fff;
+}
+.menu-bar--tablet .search-input__field {
+  height: 40px;
+  padding-left: 38px;
+  font-size: 13px;
+}
+.menu-bar--phone .search-input__field {
+  height: 38px;
+  padding-left: 36px;
+  font-size: 13px;
 }
 .search-input__field::placeholder { color: #6B6B6B; font: inherit; }
 
@@ -269,4 +300,8 @@
 .search-dropdown-item .corridor {
   color: #999;
   font-size: 12px;
+}
+
+.search-hint {
+  margin-top: 8px;
 }

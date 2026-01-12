@@ -1,26 +1,43 @@
 import React, { useEffect, useState, useMemo } from "react";
 import "./MenuBar.css";
 import MenuArrowBtn from '../MenuArrowBtn/MenuArrowBtn';
-import DoubleAltArrowLeft from '../../../Sprite/Double Alt Arrow Left.svg';
-import DoubleAltArrowRight from '../../../Sprite/Double Alt Arrow Right.svg';
-import logonobg from '../../../Sprite/logonobg 1.svg'
+import DoubleAltArrowLeft from '../../../Sprite/Double-Alt-Arrow-Left-Icon.svg';
+import DoubleAltArrowRight from '../../../Sprite/Double-Alt-Arrow-Right-Icon.svg';
+import logonobg from '../../../Sprite/UniMap-Logo.svg'
 import FloorContainer from '../FloorContainer/FloorContainer';
 import SetARoute from '../SetARoute/SetARoute';
 import SettingsContainer from '../SettingsContainer/SettingsContainer';
 import RegisterContainer from '../RegisterContainer/RegisterContainer';
 import BuildingSelector from '../BuildingSelector/BuildingSelector';
-import LupaIcon from '../../../Sprite/Lupa.svg';
+import LupaIcon from '../../../Sprite/Loupe.svg';
 import roomHighlightService from '../../../services/RoomHighlightService';
 import { regularRooms } from '../../../config/positionedElements';
-const MenuBar: React.FC = () => {
+
+interface MenuBarProps {
+  activeFloor?: number;
+  onFloorChange?: (floor: number) => void;
+}
+
+const MenuBar: React.FC<MenuBarProps> = ({ activeFloor: propActiveFloor, onFloorChange }) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isContentMounted, setIsContentMounted] = useState(true);
-  const [activeFloor, setActiveFloor] = useState(1);
+  const [internalActiveFloor, setInternalActiveFloor] = useState(1);
+  
+  // Use prop if provided, otherwise use internal state
+  const activeFloor = propActiveFloor ?? internalActiveFloor;
+  const handleFloorChange = (floor: number) => {
+    if (onFloorChange) {
+      onFloorChange(floor);
+    } else {
+      setInternalActiveFloor(floor);
+    }
+  };
   
   // Search functionality
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchDropdownOpen, setIsSearchDropdownOpen] = useState(false);
+  const [searchSelectedRoomId, setSearchSelectedRoomId] = useState<string | null>(null);
 
   // Mock data for rooms - replace with actual data from your config
   const rooms = regularRooms;
@@ -37,6 +54,12 @@ const MenuBar: React.FC = () => {
       .sort((a, b) => a.number - b.number);
   }, [rooms, searchQuery]);
 
+  const selectedSearchRoom = searchSelectedRoomId
+    ? rooms.find(room => room.id === searchSelectedRoomId) ?? null
+    : null;
+  const showSearchHint = Boolean(selectedSearchRoom);
+  const isSearchRoomOnActiveFloor = selectedSearchRoom?.floor === activeFloor;
+
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchQuery(value);
@@ -44,6 +67,16 @@ const MenuBar: React.FC = () => {
     
     if (!value.trim()) {
       roomHighlightService.clearHighlight();
+      setSearchSelectedRoomId(null);
+      return;
+    }
+
+    if (searchSelectedRoomId) {
+      const selectedRoom = rooms.find(room => room.id === searchSelectedRoomId);
+      if (selectedRoom && selectedRoom.number.toString() !== value.trim()) {
+        roomHighlightService.clearHighlight();
+        setSearchSelectedRoomId(null);
+      }
     }
   };
 
@@ -52,13 +85,18 @@ const MenuBar: React.FC = () => {
       const firstRoom = filteredRooms[0];
       roomHighlightService.highlightRoom(firstRoom.id);
       setSearchQuery(firstRoom.number.toString());
+      setSearchSelectedRoomId(firstRoom.id);
       setIsSearchDropdownOpen(false);
+    } else {
+      roomHighlightService.clearHighlight();
+      setSearchSelectedRoomId(null);
     }
   };
 
   const handleRoomSelect = (room: typeof rooms[0]) => {
     roomHighlightService.highlightRoom(room.id);
     setSearchQuery(room.number.toString());
+    setSearchSelectedRoomId(room.id);
     setIsSearchDropdownOpen(false);
   };
 
@@ -75,12 +113,14 @@ const MenuBar: React.FC = () => {
   }, []);
 
   let className = "menu-bar";
-  if (windowWidth <= 900) {
-    className += " menu-bar--mobile";
-  } else if (windowWidth <= 1920) {
-    className += " menu-bar--medium";
+  if (windowWidth < 720) {
+    className += " menu-bar--phone";
+  } else if (windowWidth < 1100) {
+    className += " menu-bar--tablet";
+  } else if (windowWidth < 1440) {
+    className += " menu-bar--laptop";
   } else {
-    className += " menu-bar--large";
+    className += " menu-bar--desktop";
   }
   if (isCollapsed) {
     className += " menu-bar--collapsed";
@@ -145,7 +185,7 @@ const MenuBar: React.FC = () => {
                   </span>
                   <input 
                     className="ui-input__field search-input__field" 
-                    placeholder="Пошук" 
+                    placeholder={'\u0417\u043d\u0430\u0439\u0442\u0438 \u043a\u0430\u0431\u0456\u043d\u0435\u0442'} 
                     value={searchQuery}
                     onChange={handleSearchInputChange}
                     onKeyPress={handleKeyPress}
@@ -162,12 +202,24 @@ const MenuBar: React.FC = () => {
                       onClick={() => handleRoomSelect(room)}
                     >
                       <span className="room-number">{room.number}</span>
-                      <span className="room-id">{room.id}</span>
-                      <span className="corridor">Коридор {room.corridor}</span>
+                      <span className="room-id">{`\u041a\u0430\u0431\u0456\u043d\u0435\u0442 ${room.number}`}</span>
+                      <span className="corridor">{`\u041a\u043e\u0440\u0438\u0434\u043e\u0440 ${room.corridor}`}</span>
                     </div>
                   ))}
                 </div>
               </div>
+              {showSearchHint && selectedSearchRoom && (
+                <div className="route-hint search-hint" role="status">
+                  <span className="route-hint__title">Пошук кабінету</span>
+                  <span className="route-hint__text">
+                    Кабінет <strong>{selectedSearchRoom.number}</strong> — {selectedSearchRoom.floor} поверх
+                    {selectedSearchRoom.corridor ? `, коридор ${selectedSearchRoom.corridor}` : ''}.{' '}
+                    {isSearchRoomOnActiveFloor
+                      ? 'Показано на карті.'
+                      : `Щоб побачити, натисніть ${selectedSearchRoom.floor} поверх.`}
+                  </span>
+                </div>
+              )}
             </section>
 
             <section className="menu-bar__section" aria-labelledby="building-heading">
@@ -179,13 +231,13 @@ const MenuBar: React.FC = () => {
               <h2 id="floors-heading" className="visually-hidden">Поверх</h2>
               <FloorContainer
                 activeFloor={activeFloor}
-                onFloorChange={setActiveFloor}
+                onFloorChange={handleFloorChange}
               />
             </section>
 
             <section className="menu-bar__section" aria-labelledby="route-heading">
               <h2 id="route-heading" className="visually-hidden">Маршрут</h2>
-              <SetARoute />
+              <SetARoute activeFloor={activeFloor} onFloorChange={handleFloorChange} />
             </section>
 
             <div className="Line"></div>

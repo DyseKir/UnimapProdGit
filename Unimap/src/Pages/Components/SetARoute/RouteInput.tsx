@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './RouteInput.css';
 import Button from '../UI/Button';
-import ArrowIcon from '../../../Sprite/drop-down-arrow.svg';
 import { regularRooms } from '../../../config/positionedElements';
+import squaresConfig from '../../../config/positionedElements';
 
 interface RouteInputProps {
   fromValue: string;
@@ -11,22 +11,20 @@ interface RouteInputProps {
   onToChange: (value: string) => void;
 }
 
-const RouteInput: React.FC<RouteInputProps> = ({ 
-  fromValue, 
-  toValue, 
-  onFromChange, 
-  onToChange 
+const RouteInput: React.FC<RouteInputProps> = ({
+  fromValue,
+  toValue,
+  onFromChange,
+  onToChange,
 }) => {
   const [isFromDropdownOpen, setIsFromDropdownOpen] = useState(false);
   const [isToDropdownOpen, setIsToDropdownOpen] = useState(false);
   const availableRooms = regularRooms;
-  
+
   const fromListRef = useRef<HTMLUListElement>(null);
   const toListRef = useRef<HTMLUListElement>(null);
   const fromRootRef = useRef<HTMLDivElement>(null);
   const toRootRef = useRef<HTMLDivElement>(null);
-
-
 
   const handleFromSelect = (roomId: string) => {
     onFromChange(roomId);
@@ -38,22 +36,32 @@ const RouteInput: React.FC<RouteInputProps> = ({
     setIsToDropdownOpen(false);
   };
 
-  const getRoomDisplayName = (roomId: string) => {
-    const room = availableRooms.find(r => r.id === roomId);
-    return room ? `Кімната ${room.number}` : 'Виберіть кімнату';
+  const getCabinetDisplayName = (roomId: string) => {
+    const room = availableRooms.find((r) => r.id === roomId);
+    return room ? `Кабінет ${room.number}` : 'Оберіть кабінет';
   };
 
-  // Анимация для from dropdown
+  const getCabinetDescription = (roomId: string): string => {
+    const sq = squaresConfig.find((s) => s.id === roomId);
+    if (!sq || !sq.text) return '';
+    const t: any = sq.text;
+    if (t.OnDefault && typeof t.OnDefault === 'object') {
+      return t.OnDefault.Ukrainian || t.OnDefault.English || '';
+    }
+    if (typeof t === 'object') {
+      return t.Ukrainian || t.English || '';
+    }
+    if (typeof t === 'string') return t;
+    return '';
+  };
+
+  // Animate "from" dropdown height
   useEffect(() => {
     const el = fromListRef.current;
     if (!el) return;
     const onEnd = (e: TransitionEvent) => {
       if (e.propertyName !== 'height') return;
-      if (isFromDropdownOpen) {
-        el.style.height = 'auto';
-      } else {
-        el.style.height = '0px';
-      }
+      el.style.height = isFromDropdownOpen ? 'auto' : '0px';
     };
     el.addEventListener('transitionend', onEnd);
     return () => el.removeEventListener('transitionend', onEnd);
@@ -65,25 +73,25 @@ const RouteInput: React.FC<RouteInputProps> = ({
     if (isFromDropdownOpen) {
       el.style.height = '0px';
       const full = el.scrollHeight;
-      requestAnimationFrame(() => { el.style.height = full + 'px'; });
+      requestAnimationFrame(() => {
+        el.style.height = full + 'px';
+      });
     } else {
       const full = el.scrollHeight;
       el.style.height = full + 'px';
-      requestAnimationFrame(() => { el.style.height = '0px'; });
+      requestAnimationFrame(() => {
+        el.style.height = '0px';
+      });
     }
   }, [isFromDropdownOpen, availableRooms.length]);
 
-  // Анимация для to dropdown
+  // Animate "to" dropdown height
   useEffect(() => {
     const el = toListRef.current;
     if (!el) return;
     const onEnd = (e: TransitionEvent) => {
       if (e.propertyName !== 'height') return;
-      if (isToDropdownOpen) {
-        el.style.height = 'auto';
-      } else {
-        el.style.height = '0px';
-      }
+      el.style.height = isToDropdownOpen ? 'auto' : '0px';
     };
     el.addEventListener('transitionend', onEnd);
     return () => el.removeEventListener('transitionend', onEnd);
@@ -95,15 +103,19 @@ const RouteInput: React.FC<RouteInputProps> = ({
     if (isToDropdownOpen) {
       el.style.height = '0px';
       const full = el.scrollHeight;
-      requestAnimationFrame(() => { el.style.height = full + 'px'; });
+      requestAnimationFrame(() => {
+        el.style.height = full + 'px';
+      });
     } else {
       const full = el.scrollHeight;
       el.style.height = full + 'px';
-      requestAnimationFrame(() => { el.style.height = '0px'; });
+      requestAnimationFrame(() => {
+        el.style.height = '0px';
+      });
     }
   }, [isToDropdownOpen, availableRooms.length]);
 
-  // Закрытие при клике вне компонента
+  // Close lists on outside click
   useEffect(() => {
     const onDocClick = (e: MouseEvent) => {
       if (!fromRootRef.current?.contains(e.target as Node)) {
@@ -119,24 +131,26 @@ const RouteInput: React.FC<RouteInputProps> = ({
 
   return (
     <div className="RouteInput">
-      <div ref={fromRootRef} className={`RouteSelector ${isFromDropdownOpen ? 'open' : ''}`}>
+      <div
+        ref={fromRootRef}
+        className={`RouteSelector ${isFromDropdownOpen ? 'open' : ''}`}
+      >
         <span className="RouteSelector-label">Звідки:</span>
         <Button
           className="ui-btn--block route-btn"
           variant="ghost"
-          onClick={() => setIsFromDropdownOpen(v => !v)}
+          onClick={() => setIsFromDropdownOpen((v) => !v)}
           aria-expanded={isFromDropdownOpen}
           aria-haspopup="listbox"
-          rightIcon={<img src={ArrowIcon} alt="open" style={{ width: 18, height: 18 }} />}
         >
-          {getRoomDisplayName(fromValue)}
+          {getCabinetDisplayName(fromValue)}
         </Button>
         <ul
           ref={fromListRef}
           className={`RouteSelector-list ${isFromDropdownOpen ? 'open' : ''}`}
           role="listbox"
         >
-          {availableRooms.map(room => (
+          {availableRooms.map((room) => (
             <li
               key={room.id}
               role="option"
@@ -144,30 +158,35 @@ const RouteInput: React.FC<RouteInputProps> = ({
               className={`RouteSelector-item ${fromValue === room.id ? 'selected' : ''}`}
               onClick={() => handleFromSelect(room.id)}
             >
-              Кімната {room.number}
+              {(() => {
+                const d = getCabinetDescription(room.id);
+                return d ? `Кабінет ${room.number} — ${d}` : `Кабінет ${room.number}`;
+              })()}
             </li>
           ))}
         </ul>
       </div>
 
-      <div ref={toRootRef} className={`RouteSelector ${isToDropdownOpen ? 'open' : ''}`}>
+      <div
+        ref={toRootRef}
+        className={`RouteSelector ${isToDropdownOpen ? 'open' : ''}`}
+      >
         <span className="RouteSelector-label">Куди:</span>
         <Button
           className="ui-btn--block route-btn"
           variant="ghost"
-          onClick={() => setIsToDropdownOpen(v => !v)}
+          onClick={() => setIsToDropdownOpen((v) => !v)}
           aria-expanded={isToDropdownOpen}
           aria-haspopup="listbox"
-          rightIcon={<img src={ArrowIcon} alt="open" style={{ width: 18, height: 18 }} />}
         >
-          {getRoomDisplayName(toValue)}
+          {getCabinetDisplayName(toValue)}
         </Button>
         <ul
           ref={toListRef}
           className={`RouteSelector-list ${isToDropdownOpen ? 'open' : ''}`}
           role="listbox"
         >
-          {availableRooms.map(room => (
+          {availableRooms.map((room) => (
             <li
               key={room.id}
               role="option"
@@ -175,7 +194,10 @@ const RouteInput: React.FC<RouteInputProps> = ({
               className={`RouteSelector-item ${toValue === room.id ? 'selected' : ''}`}
               onClick={() => handleToSelect(room.id)}
             >
-              Кімната {room.number}
+              {(() => {
+                const d = getCabinetDescription(room.id);
+                return d ? `Кабінет ${room.number} — ${d}` : `Кабінет ${room.number}`;
+              })()}
             </li>
           ))}
         </ul>
@@ -184,4 +206,4 @@ const RouteInput: React.FC<RouteInputProps> = ({
   );
 };
 
-export default RouteInput; 
+export default RouteInput;

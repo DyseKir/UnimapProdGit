@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import type { BeaconPoint } from '../config/beaconPoints';
 import beaconRouteService from '../services/BeaconRouteService';
+import { MAP_HEIGHT, MAP_WIDTH } from '../config/mapDimensions';
 
 interface BeaconRendererProps {
   mapTransform?: {
@@ -98,8 +99,8 @@ export const BeaconRenderer: React.FC<BeaconRendererProps> = ({
         position: 'fixed',
         top: 0,
         left: 0,
-        width: '3100px',
-        height: '3300px',
+        width: `${MAP_WIDTH}px`,
+        height: `${MAP_HEIGHT}px`,
         pointerEvents: 'none',
         zIndex: 20,
         transform: `translate(${mapTransform.x}px, ${mapTransform.y}px) scale(${mapTransform.scale})`,

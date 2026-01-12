@@ -1,13 +1,14 @@
 export interface RoomHighlightEvent {
   roomId: string | null;
+  roomIds: string[];
   highlightColor: string;
 }
 
 type HighlightCallback = (event: RoomHighlightEvent) => void;
 
 class RoomHighlightService {
-  private highlightedRoomId: string | null = null;
-  private highlightColor: string = '#90EE90'; // Light green
+  private highlightedRoomIds: string[] = [];
+  private highlightColor: string = '#9BEF8B';
   private listeners: HighlightCallback[] = [];
 
   // Subscribe to highlight events
@@ -27,17 +28,33 @@ class RoomHighlightService {
   }
 
   // Highlight a specific room
-  highlightRoom(roomId: string | null) {
-    this.highlightedRoomId = roomId;
+  highlightRoom(roomId: string | null, options?: { color?: string }) {
+    const roomIds = roomId ? [roomId] : [];
+    this.highlightRooms(roomIds, options);
+  }
+
+  // Highlight multiple rooms with the same color
+  highlightRooms(roomIds: string[], options?: { color?: string }) {
+    const normalized = Array.from(
+      new Set(roomIds.filter((roomId): roomId is string => Boolean(roomId)))
+    );
+    this.highlightedRoomIds = normalized;
+    const color = options?.color ?? this.highlightColor;
     this.emit({
-      roomId: this.highlightedRoomId,
-      highlightColor: this.highlightColor
+      roomId: normalized[0] ?? null,
+      roomIds: normalized,
+      highlightColor: color,
     });
   }
 
   // Get current highlighted room
   getHighlightedRoom() {
-    return this.highlightedRoomId;
+    return this.highlightedRoomIds[0] ?? null;
+  }
+
+  // Get current highlighted rooms
+  getHighlightedRooms() {
+    return [...this.highlightedRoomIds];
   }
 
   // Get highlight color
@@ -47,16 +64,17 @@ class RoomHighlightService {
 
   // Clear highlight
   clearHighlight() {
-    this.highlightRoom(null);
+    this.highlightRooms([]);
   }
 
   // Set custom highlight color
   setHighlightColor(color: string) {
     this.highlightColor = color;
-    if (this.highlightedRoomId) {
+    if (this.highlightedRoomIds.length > 0) {
       this.emit({
-        roomId: this.highlightedRoomId,
-        highlightColor: this.highlightColor
+        roomId: this.highlightedRoomIds[0] ?? null,
+        roomIds: [...this.highlightedRoomIds],
+        highlightColor: this.highlightColor,
       });
     }
   }

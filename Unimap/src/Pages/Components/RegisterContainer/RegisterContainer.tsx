@@ -1,7 +1,7 @@
 import React from 'react';
 import './RegisterContainer.css';
-import UniversityLogo from '../../../Sprite/universityLogo1 1.svg';
-import ThreeDots from '../../../Sprite/ThreeDots.svg';
+import UniversityLogo from '../../../Sprite/University-Logo.svg';
+import ThreeDots from '../../../Sprite/Three-Dots.svg';
 
 const RegisterContainer: React.FC = () => {
   return (

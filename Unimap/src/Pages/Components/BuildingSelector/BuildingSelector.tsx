@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './BuildingSelector.css';
 import Button from '../UI/Button';
-import HomeIcon from '../../../Sprite/Home Smile.svg';
-import ArrowIcon from '../../../Sprite/drop-down-arrow.svg';
+import HomeIcon from '../../../Sprite/Home-Icon.svg';
+import ArrowIcon from '../../../Sprite/Drop-down-arrow-Icon.svg';
 import { buildings as defaultBuildings, type BuildingOption } from '../../../config/buildings';
 
 interface BuildingSelectorProps {

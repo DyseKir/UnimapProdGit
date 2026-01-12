@@ -1,9 +1,9 @@
 import React from 'react';
 import './SettingsContainer.css';
 import MenuLink from '../MenuLink/MenuLink';
-import UiwlinkImg from '../../../Sprite/uiw_link.svg';
-import FacebookImg from '../../../Sprite/line-md_facebook.svg';
-import InstagramImg from '../../../Sprite/lets-icons_insta.svg';
+import UiwlinkImg from '../../../Sprite/Ui-Link.svg';
+import FacebookImg from '../../../Sprite/Facebook-icon.svg';
+import InstagramImg from '../../../Sprite/Insta-Icon.svg';
 import SettingsImg from '../../../Sprite/Settings.svg';
 
 const SettingsContainer: React.FC = () => {

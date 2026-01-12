@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import type { Route } from '../services/RouteService';
 import routeService from '../services/RouteService';
+import { MAP_HEIGHT, MAP_WIDTH } from '../config/mapDimensions';
 
 interface RouteRendererProps {
   mapTransform?: {
@@ -46,8 +47,8 @@ export const RouteRenderer: React.FC<RouteRendererProps> = ({
         position: 'fixed',
         top: 0,
         left: 0,
-        width: '3100px',
-        height: '3300px',
+        width: `${MAP_WIDTH}px`,
+        height: `${MAP_HEIGHT}px`,
         pointerEvents: 'none',
         zIndex: 15, // Выше комнат
         transform: `translate(${mapTransform.x}px, ${mapTransform.y}px) scale(${mapTransform.scale})`,

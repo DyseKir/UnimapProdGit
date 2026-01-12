@@ -15,6 +15,11 @@ export interface PositionedElementConfig {
   // If provided, the element should render an image sprite instead of a colored box
   imgSrc?: string; // path to sprite (e.g., './src/Sprite/stair.png')
   category?: 'regular' | 'toilet' | 'stairs' | 'buffet';
+  text?: {
+    Ukrainian?: string;
+    English?: string;
+    OnHover?: string;
+  };
   content?: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
@@ -24,6 +29,7 @@ export interface PositionedElementConfig {
   visible?: boolean;
   corridor?: number; // corridor number for grouping
   corridorEntrySide?: 'top' | 'bottom' | 'left' | 'right';
+  floor?: number; // floor number to support multi-level maps
 }
 
 export class PositionedElementsService {

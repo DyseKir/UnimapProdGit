@@ -1,6 +1,6 @@
 import React from 'react';
 import './FloorBtn.css';
-import SteirsImg from '../../../Sprite/ph_steps.svg';
+import SteirsImg from '../../../Sprite/Stairs-icon.svg';
 
 interface FloorBtnProps {
   floorNumber: number;

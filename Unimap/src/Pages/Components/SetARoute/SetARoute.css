@@ -43,3 +43,31 @@
   border-color: #39A39B;
   color: #fff;
 } 
+
+.route-hint {
+  border: 1px solid rgba(155, 239, 139, 0.45);
+  background: rgba(155, 239, 139, 0.12);
+  border-radius: 12px;
+  padding: 10px 12px;
+  color: #4a4a4a;
+  font-size: 12px;
+  line-height: 18px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.route-hint__title {
+  display: block;
+  font-weight: 600;
+  color: #4f9e4a;
+  margin-bottom: 4px;
+}
+
+.route-hint__text {
+  display: block;
+}
+
+.route-hint__text strong {
+  color: #4f9e4a;
+  font-weight: 600;
+}
