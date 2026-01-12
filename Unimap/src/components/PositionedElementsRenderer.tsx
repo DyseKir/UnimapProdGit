@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import type { PositionedElementConfig } from '../services/PositionedElementsService';
 import roomHighlightService from '../services/RoomHighlightService';
 import { getSquaresConfigForFloor } from '../config/positionedElements';
@@ -18,6 +18,10 @@ interface PositionedElementsRendererProps {
 }
 
 type Language = 'Ukrainian' | 'English';
+
+const PRIMARY_COLOR = '#39A39B';
+const PRIMARY_BORDER_COLOR = '#2d8a84';
+const DEFAULT_HIGHLIGHT_COLOR = '#9BEF8B';
 
 const calculateResponsiveFontSize = (
   text: string | number | undefined,
@@ -107,6 +111,186 @@ const buildHighlightVars = (color: string): React.CSSProperties => {
   } as React.CSSProperties;
 };
 
+type ExtendedText = {
+  OnDefault?: { Ukrainian: string; English: string };
+  OnHover?: { Ukrainian: string; English: string; Time?: { Ukrainian: string; English: string } } | string;
+  Ukrainian?: string;
+  English?: string;
+};
+
+interface PreparedRoom extends PositionedElementConfig {
+  resolvedImgSrc?: string;
+  defaultText?: string | number;
+  hoverText?: string;
+  hasHoverText: boolean;
+  baseStyle: React.CSSProperties;
+  baseCardStyle: React.CSSProperties;
+  contentStyle: React.CSSProperties;
+}
+
+const resolveRoomText = (
+  squareConfig: PositionedElementConfig,
+  language: Language
+): { defaultText?: string | number; hoverText?: string } => {
+  let defaultText: string | number | undefined = squareConfig.number;
+  let hoverText: string | undefined;
+
+  if (squareConfig.text) {
+    const textExtended = squareConfig.text as ExtendedText;
+
+    if (textExtended.OnDefault || (textExtended.OnHover && typeof textExtended.OnHover === 'object')) {
+      if (textExtended.OnDefault) {
+        defaultText = language === 'English'
+          ? (textExtended.OnDefault.English || textExtended.OnDefault.Ukrainian || '')
+          : (textExtended.OnDefault.Ukrainian || textExtended.OnDefault.English || '');
+      }
+
+      if (textExtended.OnHover && typeof textExtended.OnHover === 'object') {
+        const hoverTextBase = language === 'English'
+          ? (textExtended.OnHover.English || textExtended.OnHover.Ukrainian || '')
+          : (textExtended.OnHover.Ukrainian || textExtended.OnHover.English || '');
+        const timeText = textExtended.OnHover.Time
+          ? (language === 'English' ? textExtended.OnHover.Time.English : textExtended.OnHover.Time.Ukrainian)
+          : '';
+        const combined = timeText ? `${hoverTextBase}\n${timeText}` : hoverTextBase;
+        hoverText = combined.trim() ? combined : undefined;
+      }
+    } else {
+      const t: any = squareConfig.text as any;
+      const baseText = language === 'English'
+        ? (t.English || t.Ukrainian || '')
+        : (t.Ukrainian || t.English || '');
+      defaultText = baseText;
+
+      if (typeof t.OnHover === 'string' && t.OnHover.trim()) {
+        hoverText = t.OnHover;
+      }
+    }
+  }
+
+  if (typeof defaultText === 'string' && defaultText.trim() === '') {
+    defaultText = squareConfig.number;
+  }
+
+  if (typeof defaultText === 'undefined') {
+    defaultText = squareConfig.number;
+  }
+
+  return { defaultText, hoverText };
+};
+
+const getSizingText = (
+  defaultText: string | number | undefined,
+  hoverText?: string
+): string | number => {
+  const defaultValue = defaultText ?? '';
+  const hoverValue = hoverText ?? '';
+  const defaultLength = defaultValue.toString().length;
+  const hoverLength = hoverValue.toString().length;
+
+  if (hoverLength > defaultLength) {
+    return hoverValue;
+  }
+
+  return defaultValue;
+};
+
+const resolveImgSrc = (squareConfig: PositionedElementConfig): string | undefined => {
+  if (squareConfig.imgSrc) {
+    return squareConfig.imgSrc;
+  }
+
+  if (squareConfig.category === 'toilet') {
+    return './src/Sprite/WC-icon.svg';
+  }
+
+  if (squareConfig.category === 'stairs') {
+    return './src/Sprite/Stairs-icon.svg';
+  }
+
+  if (squareConfig.category === 'buffet') {
+    return './src/Sprite/Buffet-icon.svg';
+  }
+
+  return undefined;
+};
+
+interface RoomElementProps {
+  room: PreparedRoom;
+  isHighlighted: boolean;
+  highlightVars: React.CSSProperties;
+  highlightColor: string;
+}
+
+const RoomElement = React.memo(
+  ({ room, isHighlighted, highlightVars, highlightColor }: RoomElementProps) => {
+    const rootClassName = [
+      'positioned-element',
+      room.className,
+      room.hasHoverText ? 'positioned-element--has-hover-text' : ''
+    ].filter(Boolean).join(' ');
+
+    const cardClassName = `positioned-element__card${isHighlighted ? ' positioned-element__card--highlighted' : ''}`;
+    const cardStyle = isHighlighted
+      ? {
+          ...room.baseCardStyle,
+          ...highlightVars,
+          background: highlightColor,
+          border: `${room.borderWidth || 2}px solid var(--room-highlight-border)`,
+          color: '#0F3A36',
+        }
+      : room.baseCardStyle;
+
+    const showDefaultText = room.defaultText !== undefined && room.defaultText !== null;
+
+    return (
+      <div
+        className={rootClassName}
+        style={room.baseStyle}
+        onClick={room.onClick}
+        onMouseEnter={room.onHover}
+      >
+        <div style={room.contentStyle}>
+          <div style={cardStyle} className={cardClassName}>
+            {showDefaultText && (
+              <span className="positioned-element__text positioned-element__text--default">
+                {room.defaultText}
+              </span>
+            )}
+            {room.hasHoverText && (
+              <span className="positioned-element__text positioned-element__text--hover">
+                {room.hoverText}
+              </span>
+            )}
+          </div>
+          {room.resolvedImgSrc && (
+            <img
+              src={room.resolvedImgSrc}
+              alt={room.id}
+              className="positioned-element__img"
+            />
+          )}
+        </div>
+      </div>
+    );
+  },
+  (prev, next) => {
+    if (prev.room !== next.room) {
+      return false;
+    }
+
+    if (prev.isHighlighted !== next.isHighlighted) {
+      return false;
+    }
+
+    if (prev.isHighlighted && prev.highlightColor !== next.highlightColor) {
+      return false;
+    }
+
+    return true;
+  }
+);
+
 export const PositionedElementsRenderer: React.FC<PositionedElementsRendererProps> = ({
   containerClassName = '',
   containerStyle = {},
@@ -114,10 +298,8 @@ export const PositionedElementsRenderer: React.FC<PositionedElementsRendererProp
   language = 'Ukrainian',
   activeFloor = 1,
 }) => {
-  const [elements, setElements] = useState<PositionedElementConfig[]>([]);
-  const [hoveredElementId, setHoveredElementId] = useState<string | null>(null);
   const [highlightedRoomIds, setHighlightedRoomIds] = useState<string[]>([]);
-  const [currentHighlightColor, setCurrentHighlightColor] = useState<string>('#9BEF8B');
+  const [currentHighlightColor, setCurrentHighlightColor] = useState<string>(DEFAULT_HIGHLIGHT_COLOR);
 
   useEffect(() => {
     const handleHighlight = (event: { roomId: string | null; roomIds?: string[]; highlightColor: string }) => {
@@ -135,156 +317,79 @@ export const PositionedElementsRenderer: React.FC<PositionedElementsRendererProp
     };
   }, []);
 
-  useEffect(() => {
-    const primaryColor = '#39A39B';
-    const primaryBorderColor = '#2d8a84';
-    const highlightColor = currentHighlightColor || '#9BEF8B';
-    const highlightVars = buildHighlightVars(highlightColor);
+  const highlightColor = currentHighlightColor || DEFAULT_HIGHLIGHT_COLOR;
+  const highlightVars = useMemo(() => buildHighlightVars(highlightColor), [highlightColor]);
+  const highlightedRoomIdsSet = useMemo(() => new Set(highlightedRoomIds), [highlightedRoomIds]);
 
-    const squares = getSquaresConfigForFloor(activeFloor).map(squareConfig => {
-      const isHighlighted = highlightedRoomIds.includes(squareConfig.id);
-      const isHovered = hoveredElementId === squareConfig.id;
-      const category = squareConfig.category;
-      let resolvedImgSrc: string | undefined = squareConfig.imgSrc;
-      if (!resolvedImgSrc) {
-        if (category === 'toilet') {
-          resolvedImgSrc = './src/Sprite/WC-icon.svg';
-        } else if (category === 'stairs') {
-          resolvedImgSrc = './src/Sprite/Stairs-icon.svg';
-        } else if (category === 'buffet') {
-          resolvedImgSrc = './src/Sprite/Buffet-icon.svg';
-        }
-      }
-
-      let displayText: string | number | undefined = squareConfig.number;
-      if (squareConfig.text) {
-        type ExtendedText = {
-          OnDefault?: { Ukrainian: string; English: string };
-          OnHover?: { Ukrainian: string; English: string; Time?: { Ukrainian: string; English: string } } | string;
-          Ukrainian?: string;
-          English?: string;
-        };
-        const textExtended = squareConfig.text as ExtendedText;
-
-        if (textExtended.OnDefault || (textExtended.OnHover && typeof textExtended.OnHover === 'object')) {
-          if (isHovered && textExtended.OnHover && typeof textExtended.OnHover === 'object') {
-            const hoverText = language === 'English'
-              ? (textExtended.OnHover.English || textExtended.OnHover.Ukrainian || '')
-              : (textExtended.OnHover.Ukrainian || textExtended.OnHover.English || '');
-            const timeText = textExtended.OnHover.Time
-              ? (language === 'English' ? textExtended.OnHover.Time.English : textExtended.OnHover.Time.Ukrainian)
-              : '';
-            displayText = timeText ? `${hoverText}\n${timeText}` : hoverText;
-          } else if (textExtended.OnDefault) {
-            displayText = language === 'English'
-              ? (textExtended.OnDefault.English || textExtended.OnDefault.Ukrainian || '')
-              : (textExtended.OnDefault.Ukrainian || textExtended.OnDefault.English || '');
-          }
-        } else {
-          const t: any = squareConfig.text as any;
-          if (isHovered && t.OnHover && typeof t.OnHover === 'string') {
-            displayText = t.OnHover;
-          } else {
-            displayText = language === 'English'
-              ? (t.English || t.Ukrainian || '')
-              : (t.Ukrainian || t.English || '');
-          }
-        }
-      }
-
-      if ((typeof displayText === 'string' && displayText.trim() === '') || typeof displayText === 'undefined') {
-        displayText = squareConfig.number;
-      }
-
+  const preparedRooms = useMemo<PreparedRoom[]>(() => {
+    const floorRooms = getSquaresConfigForFloor(activeFloor);
+    return floorRooms.map(squareConfig => {
+      const resolvedImgSrc = resolveImgSrc(squareConfig);
+      const { defaultText, hoverText } = resolveRoomText(squareConfig, language);
+      const sizingText = getSizingText(defaultText, hoverText);
       const adaptiveFontSize = calculateResponsiveFontSize(
-        displayText,
+        sizingText,
         squareConfig.width,
         squareConfig.height,
         squareConfig.fontSize || 24
       );
+      const hasHoverText = Boolean(hoverText && hoverText.trim());
 
-      const cardClassName = `positioned-element__card${isHighlighted ? ' positioned-element__card--highlighted' : ''}`;
-      const content = (
-        <div style={{
-          width: '100%',
-          height: '100%',
-          position: 'relative',
-          transform: `rotate(${squareConfig.rotation || 0}deg)`,
-        }}>
-          <div style={{
-            ...((isHighlighted ? highlightVars : {}) as React.CSSProperties),
-            position: 'absolute',
-            inset: 0,
-            background: isHighlighted
-              ? highlightColor
-              : (squareConfig.color || primaryColor),
-            border: `${squareConfig.borderWidth || 2}px solid ${
-              isHighlighted ? 'var(--room-highlight-border)' : (squareConfig.borderColor || primaryBorderColor)
-            }`,
-            borderRadius: `${squareConfig.borderRadius || 8}px`,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: isHighlighted ? '#0F3A36' : (squareConfig.fontColor || '#ffffff'),
-            fontSize: `${adaptiveFontSize}px`,
-            fontWeight: 'bold',
-            userSelect: 'none',
-            transition: 'opacity 0.2s ease, color 0.2s ease, background 0.2s ease',
-            opacity: isHovered ? 0.7 : 1,
-            whiteSpace: 'pre-line',
-            textAlign: 'center',
-            lineHeight: '1.2',
-            overflowWrap: 'anywhere',
-            padding: '4px'
-          }} className={cardClassName}>
-            {displayText}
-          </div>
-          {resolvedImgSrc && (
-            <img
-              src={resolvedImgSrc}
-              alt={squareConfig.id}
-              style={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                width: '70%',
-                height: '70%',
-                objectFit: 'contain',
-                transition: 'opacity 0.2s ease',
-                opacity: isHovered ? 0.9 : 1,
-                pointerEvents: 'none'
-              }}
-            />
-          )}
-        </div>
-      );
+      const baseStyle: React.CSSProperties = {
+        position: 'absolute',
+        left: squareConfig.x,
+        top: squareConfig.y,
+        width: squareConfig.width,
+        height: squareConfig.height,
+        zIndex: squareConfig.zIndex || 1,
+        cursor: squareConfig.onClick ? 'pointer' : 'default',
+        pointerEvents: 'auto',
+        ...squareConfig.style
+      };
+
+      const baseCardStyle: React.CSSProperties = {
+        background: squareConfig.color || PRIMARY_COLOR,
+        border: `${squareConfig.borderWidth || 2}px solid ${squareConfig.borderColor || PRIMARY_BORDER_COLOR}`,
+        borderRadius: `${squareConfig.borderRadius || 8}px`,
+        color: squareConfig.fontColor || '#ffffff',
+        fontSize: `${adaptiveFontSize}px`,
+      };
+
+      const contentStyle: React.CSSProperties = {
+        width: '100%',
+        height: '100%',
+        position: 'relative',
+        transform: `rotate(${squareConfig.rotation || 0}deg)`,
+      };
 
       return {
         ...squareConfig,
-        content
+        resolvedImgSrc,
+        defaultText,
+        hoverText,
+        hasHoverText,
+        baseStyle,
+        baseCardStyle,
+        contentStyle,
       };
     });
+  }, [activeFloor, language]);
 
-    setElements(squares);
-  }, [hoveredElementId, highlightedRoomIds, language, activeFloor, currentHighlightColor]);
-
-  const handleElementClick = (element: PositionedElementConfig) => {
-    if (element.onClick) {
-      element.onClick();
-    }
-  };
-
-  const handleElementHover = (element: PositionedElementConfig) => {
-    setHoveredElementId(element.id);
-    if (element.onHover) {
-      element.onHover();
-    }
-  };
-
-  const handleElementLeave = () => {
-    setHoveredElementId(null);
-  };
+  const renderedRooms = useMemo(
+    () =>
+      preparedRooms
+        .filter(element => element.visible !== false)
+        .map(element => (
+          <RoomElement
+            key={element.id}
+            room={element}
+            isHighlighted={highlightedRoomIdsSet.has(element.id)}
+            highlightColor={highlightColor}
+            highlightVars={highlightVars}
+          />
+        )),
+    [preparedRooms, highlightedRoomIdsSet, highlightColor, highlightVars]
+  );
 
   return (
     <div 
@@ -297,35 +402,13 @@ export const PositionedElementsRenderer: React.FC<PositionedElementsRendererProp
         height: `${MAP_HEIGHT}px`,
         pointerEvents: 'none',
         zIndex: 10,
-        transform: `translate(${mapTransform.x}px, ${mapTransform.y}px) scale(${mapTransform.scale})`,
+        transform: `translate3d(${mapTransform.x}px, ${mapTransform.y}px, 0) scale(${mapTransform.scale})`,
         transformOrigin: '0 0',
+        willChange: 'transform',
         ...containerStyle
       }}
     >
-      {elements
-        .filter(element => element.visible !== false)
-        .map(element => (
-          <div
-            key={element.id}
-            className={`positioned-element ${element.className || ''}`}
-            style={{
-              position: 'absolute',
-              left: element.x,
-              top: element.y,
-              width: element.width,
-              height: element.height,
-              zIndex: element.zIndex || 1,
-              cursor: element.onClick ? 'pointer' : 'default',
-              pointerEvents: 'auto',
-              ...element.style
-            }}
-            onClick={() => handleElementClick(element)}
-            onMouseEnter={() => handleElementHover(element)}
-            onMouseLeave={handleElementLeave}
-          >
-            {element.content}
-          </div>
-        ))}
+      {renderedRooms}
     </div>
   );
 };

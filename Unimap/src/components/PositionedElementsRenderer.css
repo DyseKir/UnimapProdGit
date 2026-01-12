@@ -1,8 +1,23 @@
+.positioned-elements-container {
+  will-change: transform;
+}
+
 .positioned-element__card {
   position: absolute;
   inset: 0;
   overflow: visible;
-  will-change: box-shadow, border-color, transform;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+  padding: 4px;
+  user-select: none;
+  font-weight: bold;
+  transition: opacity 0.2s ease, color 0.2s ease, background 0.2s ease;
+  opacity: 1;
+  will-change: box-shadow, border-color, transform, opacity;
 }
 
 .positioned-element__card--highlighted {
@@ -27,6 +42,43 @@
   border-width: 1px;
   opacity: 0.35;
   animation-delay: 0.25s;
+}
+
+.positioned-element__text {
+  white-space: pre-line;
+}
+
+.positioned-element__text--hover {
+  display: none;
+}
+
+.positioned-element--has-hover-text:hover .positioned-element__text--default {
+  display: none;
+}
+
+.positioned-element--has-hover-text:hover .positioned-element__text--hover {
+  display: block;
+}
+
+.positioned-element:hover .positioned-element__card {
+  opacity: 0.7;
+}
+
+.positioned-element__img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+  transition: opacity 0.2s ease;
+  opacity: 1;
+  pointer-events: none;
+}
+
+.positioned-element:hover .positioned-element__img {
+  opacity: 0.9;
 }
 
 @keyframes roomHighlightPulse {
